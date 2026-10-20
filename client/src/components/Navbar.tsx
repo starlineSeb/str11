@@ -41,6 +41,7 @@ export default function Navbar({ variant = "dark" }: NavbarProps) {
         { href: "/portfolio", label: "Full Archive" }
       ]
     },
+    { href: "/investment", label: "Investment" },
     { href: "/journal", label: "Journal" },
     { href: "/contact", label: "Contact" }
   ];

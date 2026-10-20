@@ -134,7 +134,13 @@ export default function Home() {
               loop
               muted
               playsInline
+              preload="metadata"
+              poster="/vid/hero_poster.jpg"
             >
+              <source
+                src={import.meta.env.VITE_HERO_VIDEO_URL || "/vid/new_section_img_optimized.mp4"}
+                type="video/mp4"
+              />
               <source
                 src="/vid/new_section_img.mp4"
                 type="video/mp4"

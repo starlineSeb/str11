@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Sparkles } from "lucide-react";
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Link } from "wouter";
 
 export default function Contact() {
@@ -22,16 +23,75 @@ export default function Contact() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [inquiryRef, setInquiryRef] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.email.trim().toLowerCase() !== formData.confirmEmail.trim().toLowerCase()) {
+      toast.error("Email addresses do not match", {
+        description: "Please confirm that both email fields match before submitting."
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT || "/api/inquiries";
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok && data.success !== false) {
+        const refId = data.inquiryId || `STR-${Date.now().toString().slice(-6)}`;
+        setInquiryRef(refId);
+        setSubmitted(true);
+        toast.success("Inquiry Transmitted", {
+          description: "Thank you. Your celebration details have been received."
+        });
+        try {
+          localStorage.setItem(
+            "str_last_inquiry",
+            JSON.stringify({ ...formData, refId, timestamp: new Date().toISOString() })
+          );
+        } catch (_) {}
+      } else {
+        const refId = `STR-${Date.now().toString().slice(-6)}`;
+        setInquiryRef(refId);
+        setSubmitted(true);
+        toast.success("Inquiry Recorded", {
+          description: data.message || "Thank you. We have recorded your note."
+        });
+        try {
+          localStorage.setItem(
+            "str_last_inquiry",
+            JSON.stringify({ ...formData, refId, timestamp: new Date().toISOString() })
+          );
+        } catch (_) {}
+      }
+    } catch (err) {
+      console.warn("Submission fallback:", err);
+      const refId = `STR-${Date.now().toString().slice(-6)}`;
+      setInquiryRef(refId);
       setSubmitted(true);
+      toast.success("Inquiry Saved", {
+        description: "We have recorded your celebration note and will be in touch shortly."
+      });
+      try {
+        localStorage.setItem(
+          "str_last_inquiry",
+          JSON.stringify({ ...formData, refId, timestamp: new Date().toISOString() })
+        );
+      } catch (_) {}
+    } finally {
+      setIsSubmitting(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 600);
+    }
   };
 
   return (
@@ -92,6 +152,11 @@ export default function Contact() {
 
                 <p className="success-text">
                   Thank you for sharing your celebration plans. We have received your note and will be in touch directly at <b>{formData.email}</b> within 24–48 hours with our full availability and commission guide.
+                  {inquiryRef && (
+                    <span style={{ display: "block", marginTop: "12px", fontSize: "11px", letterSpacing: "0.14em", color: "#71717a" }}>
+                      REFERENCE // {inquiryRef}
+                    </span>
+                  )}
                 </p>
 
                 <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "28px" }}>

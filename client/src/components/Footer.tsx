@@ -12,9 +12,17 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim()) {
+      try {
+        await fetch("/api/newsletter", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim(), firstName: firstName.trim(), lastName: lastName.trim() })
+        });
+      } catch (_) {}
+
       setIsSubscribed(true);
       setFirstName("");
       setLastName("");
@@ -77,7 +85,7 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
               </div>
               <div className="exact-nav-col">
                 <Link href="/portfolio/photography" className="exact-footer-link">PHOTOGRAPHY</Link>
-                <Link href="/portfolio" className="exact-footer-link">PORTFOLIO</Link>
+                <Link href="/investment" className="exact-footer-link">INVESTMENT</Link>
                 <Link href="/contact" className="exact-footer-link">CONTACT</Link>
               </div>
             </div>

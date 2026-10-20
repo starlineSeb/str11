@@ -28,7 +28,7 @@ const videographyFilms: VideoFilmItem[] = [
     location: "Newport, Rhode Island",
     year: "2026",
     coverImage: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "/vid/new_section_img.mp4",
+    videoUrl: "/vid/new_section_img_optimized.mp4",
     duration: "4:32",
     camera: "Arri Alexa Mini LF // 35mm Anamorphic",
     details: "Shot on Arri Alexa Mini LF & Cooke Anamorphic Primes with live orchestral score"
@@ -54,7 +54,7 @@ const videographyFilms: VideoFilmItem[] = [
     location: "Lake Tahoe, California",
     year: "2026",
     coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "/vid/new_section_img.mp4",
+    videoUrl: "/vid/new_section_img_optimized.mp4",
     duration: "3:45",
     camera: "35mm Analog Cine Film Hybrid",
     details: "Natural Twilight & Kodak Vision3 500T 35mm motion picture film stock"
@@ -67,7 +67,7 @@ const videographyFilms: VideoFilmItem[] = [
     location: "Dallas, Texas",
     year: "2026",
     coverImage: "/wd1.jpg",
-    videoUrl: "/vid/new_section_img.mp4",
+    videoUrl: "/vid/new_section_img_optimized.mp4",
     duration: "3:20",
     camera: "Arri 4K Cinema + 35mm Emulsion",
     details: "Dallas Home Base Signature Commission with custom acoustic arrangement"
