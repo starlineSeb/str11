@@ -150,11 +150,26 @@ export default function Home() {
 
           <div className="minimal-hero-content">
             <h1 className="minimal-hero-title">
-              TELLING STORIES THAT OUTLAST THE SEASON
+              35+ YEARS OF EXPERIENCE CAPTURING TIMELESS MEMORIES
             </h1>
             <p className="minimal-hero-kicker">
-              DALLAS, TEXAS &amp; DESTINATIONS WORLDWIDE
+              FOURTH-GENERATION FAMILY ATELIER // DALLAS &amp; DESTINATIONS WORLDWIDE
             </p>
+          </div>
+        </section>
+
+        {/* ===================================================================
+            ATELIER PRIVILEGE: COMPLIMENTARY LIVE STREAMING BANNER
+            =================================================================== */}
+        <section className="starline-privilege-callout-banner">
+          <div className="starline-privilege-callout-inner">
+            <span className="privilege-sparkle">✦</span>
+            <span className="privilege-text">
+              <strong>SPECIAL ATELIER OFFER:</strong> Complimentary High-Definition Live Streaming coverage included when you book both Photography and Videography collections.
+            </span>
+            <Link href="/contact" className="privilege-link">
+              <span>RESERVE DATE →</span>
+            </Link>
           </div>
         </section>
 
@@ -164,7 +179,7 @@ export default function Home() {
             =================================================================== */}
         <section className="starline-welcome-writing-banner">
           <div className="starline-welcome-writing-inner">
-            <span className="welcome-kicker">CINEMATIC ATELIER</span>
+            <span className="welcome-kicker">FOURTH-GENERATION FAMILY STUDIO</span>
             <div className="welcome-typewriter-wrap">
               <h2 className="welcome-typewriter-text">
                 <span className="welcome-static-prefix">WELCOME TO&nbsp;</span>
@@ -175,7 +190,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="welcome-sub-note">
-              HANDCRAFTED DESTINATION WEDDING CINEMA &amp; 35MM FINE ART PHOTOGRAPHY
+              35+ YEARS OF CINEMATIC WEDDING FILMS, 35MM ANALOG ARTISTRY &amp; BESPOKE EVENT BROADCAST
             </p>
           </div>
         </section>
@@ -187,39 +202,43 @@ export default function Home() {
           <div className="dallas-about-grid">
             {/* Left Side: Company Details & Know More Button */}
             <div className="dallas-about-left">
-              <span className="minimal-statement-tag">DALLAS ATELIER // EST. 2023</span>
+              <span className="minimal-statement-tag">FOURTH-GENERATION FAMILY ATELIER // 35+ YEARS</span>
               <h2 className="dallas-about-heading">
-                Operating Since 2023 In Dallas &amp; Capturing Stories Nationwide
+                35+ Years of Experience Capturing Timeless Memories
               </h2>
 
               <p className="dallas-about-lead">
-                Founded in Dallas, Texas in 2023, Starline Atelier crafts living heirlooms of cinema and fine-art 35mm analog photography for couples seeking unhurried grace, honest human connection, and enduring memory.
+                Starline Studios is a fourth-generation family-owned studio with over 35 years of visual storytelling heritage. We unite timeless craftsmanship, creative intuition, and state-of-the-art photography and cinematic video technology to deliver unforgettable heirlooms.
               </p>
 
               <p className="dallas-about-body">
-                We believe the most poignant moments occur in between the staged poses: a quiet breath before the ceremony, the golden light grazing an evening table, and spontaneous laughter shared among closest loved ones. We travel wherever an extraordinary celebration unfolds—from Dallas private estates and Newport oceanfront mansions to Napa Valley vineyards and Big Sur coastal cliffs.
+                Serving celebrations from budget-conscious intimate gatherings to grand multi-day luxury events, our team is committed to understanding each couple&apos;s unique vision. We curate flexible packages that align with your budget without compromising optical excellence. As a signature privilege, all dual photography and videography commissions include complimentary digital live streaming for family and friends across the globe.
               </p>
 
               {/* Studio Badges */}
               <div className="dallas-about-badges-row">
                 <div className="dallas-badge-item">
-                  <span className="badge-title">HOME BASE</span>
-                  <span className="badge-val">Dallas, Texas</span>
+                  <span className="badge-title">HERITAGE</span>
+                  <span className="badge-val">35+ Years in Business</span>
                 </div>
                 <div className="dallas-badge-item">
-                  <span className="badge-title">EXPERIENCE</span>
-                  <span className="badge-val">Operating Since 2023</span>
+                  <span className="badge-title">DYNASTY</span>
+                  <span className="badge-val">4th-Gen Family Studio</span>
                 </div>
                 <div className="dallas-badge-item">
                   <span className="badge-title">MEDIUMS</span>
-                  <span className="badge-val">35mm Film + 4K Cinema</span>
+                  <span className="badge-val">4K Cinema + 35mm Film</span>
+                </div>
+                <div className="dallas-badge-item">
+                  <span className="badge-title">PROMOTION</span>
+                  <span className="badge-val">Free Live Streaming</span>
                 </div>
               </div>
 
               {/* Know More About Us Button */}
               <div className="dallas-about-cta-wrap">
                 <Link href="/about" className="minimal-btn-solid">
-                  <span>KNOW MORE ABOUT US</span>
+                  <span>EXPLORE OUR HERITAGE</span>
                   <ArrowUpRight size={15} />
                 </Link>
               </div>

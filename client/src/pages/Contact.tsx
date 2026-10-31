@@ -123,16 +123,23 @@ export default function Contact() {
               <h1 className="exact-gione-title">GET IN TOUCH!</h1>
 
               <p className="exact-gione-intro">
-                As you&apos;ve probably gathered by now, we are all about connections and life experiences. We do get a buzz with the possibility of meeting new people and documenting their adventures. Tell us about your plans!
+                Let&apos;s discuss your wedding vision and celebration budget. Contact Starline Saji today for a customized photography and videography package. We do get a buzz with the possibility of meeting new people and documenting their adventures!
               </p>
 
               <div className="exact-gione-direct-line">
                 <span className="direct-item">
-                  <b>T:</b> <a href="tel:+12148104492">+1 214 810 4492</a>
+                  <b>DIRECT (SAJI):</b> <a href="tel:+19729831517">+1 (972) 983-1517</a>
                 </span>
                 <span className="direct-item">
                   <b>E:</b> <a href="mailto:hello@starline.studio">HELLO@STARLINE.STUDIO</a>
                 </span>
+                <span className="direct-item">
+                  <b>INSTAGRAM:</b> <a href="https://www.instagram.com/starlinestudios_/" target="_blank" rel="noreferrer">@STARLINESTUDIOS_</a>
+                </span>
+              </div>
+
+              <div className="exact-gione-instagram-callout" style={{ marginTop: "14px", fontSize: "12px", color: "#666", letterSpacing: "0.06em" }}>
+                <span>✦ For Luxury weddings &amp; daily stories: <a href="https://www.instagram.com/starlinestudios_/" target="_blank" rel="noreferrer" style={{ color: "#111", textDecoration: "underline", fontWeight: 600 }}>Follow us on Instagram</a></span>
               </div>
             </div>
 

@@ -54,12 +54,12 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
       {/* Top Handle Pill */}
       <div className="exact-footer-top-handle">
         <a
-          href="https://instagram.com"
+          href="https://www.instagram.com/starlinestudios_/"
           target="_blank"
           rel="noreferrer"
           className="exact-footer-handle-link"
         >
-          @starline.cinema
+          @starlinestudios_
         </a>
       </div>
 
@@ -186,12 +186,12 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
       <div className="exact-footer-bottom-bar">
         <div className="exact-footer-bottom-inner">
           <p className="exact-footer-copyright">
-            © 2026 Starline Studio — Destination Wedding Photographer and Videographer
+            © 2026 Starline Studios — 4th Generation Wedding Photography &amp; Cinematic Videography (35+ Years in Business)
           </p>
 
           {/* Social Icons */}
           <div className="exact-footer-socials">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+            <a href="https://www.instagram.com/starlinestudios_/" target="_blank" rel="noreferrer" aria-label="Instagram">
               <Instagram size={17} />
             </a>
             <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube">

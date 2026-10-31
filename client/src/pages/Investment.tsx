@@ -20,14 +20,27 @@ export default function Pricing() {
       <main className="starline-page-main">
         {/* Minimalist Hero */}
         <section className="portfolio-hero">
-          <p className="minimal-overline">Pricing & Collections</p>
+          <p className="minimal-overline">Pricing &amp; Collections // 35+ Years Heritage</p>
           <h1 className="portfolio-title">
             Transparent Pricing,<br />
             Built Around Presence
           </h1>
           <p className="portfolio-subtitle">
-            All-inclusive cinematography & photography commissions rooted in natural light, cinema elegance, and authentic analog grain. Designed so you can be fully present.
+            We work thoughtfully with your budget and offer customized packages to meet your celebration needs without compromising quality. Serving weddings from intimate gatherings to grand luxury events.
           </p>
+        </section>
+
+        {/* Special Offer Callout Banner */}
+        <section className="starline-privilege-callout-banner" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+          <div className="starline-privilege-callout-inner">
+            <span className="privilege-sparkle">✦</span>
+            <span className="privilege-text">
+              <strong>SPECIAL OFFER:</strong> Book Photography and Videography together and receive <strong>FREE Live Streaming</strong> coverage of your event for remote and overseas family.
+            </span>
+            <Link href="/contact" className="privilege-link">
+              <span>INQUIRE NOW →</span>
+            </Link>
+          </div>
         </section>
 
         {/* Minimalist Editorial Pricing List (Zero Boxed Cards) */}

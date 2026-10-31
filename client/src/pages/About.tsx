@@ -65,64 +65,68 @@ export default function About() {
         <section className="gds-owner-section">
           <div className="gds-owner-clean-container">
             <div className="gds-owner-grid">
-              {/* Left: Sajan Portrait */}
+              {/* Left: Saji Portrait */}
               <div className="gds-owner-photo-col">
                 <div className="gds-owner-photo-box">
                   <img
                     src="/wd1.jpg"
-                    alt="Sajan - Founder & Lead Cinematographer"
+                    alt="Starline Saji - Fourth Generation Director"
                     className="gds-owner-photo"
                   />
                   <span className="gds-owner-caption">
-                    SAJAN // FOUNDER &amp; LEAD DIRECTOR
+                    STARLINE SAJI // 4TH-GENERATION DIRECTOR
                   </span>
                 </div>
               </div>
 
-              {/* Right: Sajan Story, Philosophy & Badges */}
+              {/* Right: Saji Story, Philosophy & Badges */}
               <div className="gds-owner-info-col">
                 <div className="gds-owner-header">
-                  <h2 className="gds-owner-name">SAJAN</h2>
+                  <h2 className="gds-owner-name">STARLINE SAJI</h2>
                   <p className="gds-owner-subtags">
-                    ADVENTURE, CONNECTION, ART, PEOPLE, EXPERIENCES
+                    35+ YEARS IN BUSINESS // FOURTH-GENERATION FAMILY ATELIER
                   </p>
                 </div>
 
                 <div className="gds-owner-bio">
                   <p>
-                    I love getting to know new people. This comes from the knowledge that we all have a different journey in life and there is something exciting and deeply inspiring about that.
+                    Starline Studios is a fourth-generation family-owned studio with over 35 years of visual storytelling heritage. We combine generational craftsmanship, creative intuition, and state-of-the-art camera and cinema technology to provide exceptional fine-art photography and cinematic wedding films.
                   </p>
                   <p>
-                    Operating out of Dallas, Texas since 2023, I travel wherever an extraordinary celebration unfolds—from Dallas private estates and Newport oceanfront mansions to Napa Valley vineyards and Big Sur coastal cliffs.
+                    Our team is dedicated to understanding each client&apos;s unique celebration vision. We design customized packages that fit your budget while delivering unforgettable, heirloom-quality results—whether you are planning an intimate church celebration, a cultural diaspora gathering, or an opulent multi-day luxury estate wedding.
                   </p>
                   <p>
-                    I love weddings because they serve as a timeless reminder of the very best about humanity—embodying love, joy, beauty, and quiet companionship. My approach is built entirely on creating a calm, effortless atmosphere rather than commanding rigid poses.
+                    Based in Dallas, Texas and traveling worldwide, we believe a wedding is a timeless reminder of human connection, family, and shared love. Our documentary approach creates an unhurried, calm atmosphere where real emotion unfolds naturally without stiff or artificial poses.
                   </p>
                   <p>
-                    Specializing in 35mm analog film and 4K cinema, I allow your celebration to breathe naturally, capturing the quiet glances, gentle touch, and spontaneous laughter that give your memories permanent emotional gravity.
+                    As a signature studio privilege, we provide <strong>complimentary broadcast-grade Live Streaming</strong> when you book both photography and videography collections, ensuring grandparents, overseas relatives, and distant loved ones are fully present on your day.
                   </p>
                 </div>
 
                 {/* Studio Badges */}
                 <div className="gds-owner-badges">
                   <div className="gds-owner-badge-item">
-                    <strong>Dallas, Texas</strong>
-                    <span>Operating Since 2023</span>
+                    <strong>35+ Years Heritage</strong>
+                    <span>Four Generations</span>
                   </div>
                   <div className="gds-owner-badge-item">
-                    <strong>Mediums</strong>
+                    <strong>Dallas Base</strong>
+                    <span>Commissions Worldwide</span>
+                  </div>
+                  <div className="gds-owner-badge-item">
+                    <strong>Dual Medium</strong>
                     <span>35mm Film + 4K Cinema</span>
                   </div>
                   <div className="gds-owner-badge-item">
-                    <strong>Commissions</strong>
-                    <span>18 Celebrations / Year</span>
+                    <strong>Special Offer</strong>
+                    <span>Free Live Streaming</span>
                   </div>
                 </div>
 
                 {/* Contact Us Button */}
                 <div className="gds-owner-btn-wrap">
                   <Link href="/contact" className="gds-contact-btn">
-                    <span>CONTACT US</span>
+                    <span>CONNECT WITH SAJI</span>
                   </Link>
                 </div>
               </div>
@@ -228,6 +232,71 @@ export default function About() {
                 <div className="gds-svg-logo antibride-logo">
                   <span className="gds-logo-antibride">THE ANTI-BRIDE</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===================================================================
+            WHY CHOOSE STARLINE STUDIOS (THE HERITAGE & CRAFTSMANSHIP PILLARS)
+            =================================================================== */}
+        <section className="gds-why-choose-section">
+          <div className="gds-why-choose-inner">
+            <div className="gds-why-choose-header">
+              <span className="minimal-overline">DECEMBERED ARTISTRY</span>
+              <h2 className="gds-why-choose-title">WHY CHOOSE STARLINE STUDIOS</h2>
+              <p className="gds-why-choose-subtitle">
+                Four generations of dedication to unhurried storytelling, generational presence, and cutting-edge optical mastery.
+              </p>
+            </div>
+
+            <div className="gds-why-choose-grid">
+              <div className="gds-why-card">
+                <span className="gds-why-num">01</span>
+                <h3 className="gds-why-heading">35+ Years &amp; 4 Generations</h3>
+                <p className="gds-why-desc">
+                  A rare multi-generational legacy in Dallas. Decades of refined expertise ensure your memories are handled with deep reverence, technical poise, and creative continuity.
+                </p>
+              </div>
+
+              <div className="gds-why-card">
+                <span className="gds-why-num">02</span>
+                <h3 className="gds-why-heading">State-of-the-Art Optical Mastery</h3>
+                <p className="gds-why-desc">
+                  We pair high-end cinema bodies (Arri, RED) and Leica prime lenses with authentic 35mm analog film rolls to yield rich skin tones and unforgettable cinematic color.
+                </p>
+              </div>
+
+              <div className="gds-why-card">
+                <span className="gds-why-num">03</span>
+                <h3 className="gds-why-heading">Complimentary Global Live Streaming</h3>
+                <p className="gds-why-desc">
+                  Enjoy complimentary high-definition digital live streaming when you book both photography and videography packages, connecting family and loved ones worldwide in real time.
+                </p>
+              </div>
+
+              <div className="gds-why-card">
+                <span className="gds-why-num">04</span>
+                <h3 className="gds-why-heading">Flexible Packages for All Budgets</h3>
+                <p className="gds-why-desc">
+                  From budget-conscious intimate celebrations and church directory gatherings to grand multi-day luxury estate weddings, we create customized collections designed for your needs.
+                </p>
+              </div>
+
+              <div className="gds-why-card">
+                <span className="gds-why-num">05</span>
+                <h3 className="gds-why-heading">Personalized Customer Service</h3>
+                <p className="gds-why-desc">
+                  Unhurried, personal care from your initial consultation through final heirloom delivery. We guide with warmth and let your celebration breathe without stiff, forced poses.
+                </p>
+              </div>
+
+              <div className="gds-why-card">
+                <span className="gds-why-num">06</span>
+                <h3 className="gds-why-heading">Luxury Wedding Experience</h3>
+                <p className="gds-why-desc">
+                  Dedicated multi-artist teams, drone cinematography, bespoke Italian leather-bound albums, and full event telecasting available for extraordinary destination celebrations.
+                </p>
               </div>
             </div>
           </div>

@@ -201,14 +201,14 @@ export const investmentTiers: InvestmentTier[] = [
   {
     id: "intimate",
     name: "The Intimate Story",
-    tagline: "Tailored for micro-weddings, elopements, and bespoke celebrations under 30 guests.",
+    tagline: "Tailored for micro-weddings, church ceremonies, and bespoke gatherings. Flexible custom options for every budget.",
     price: "$3,400",
     coverage: "Up to 6 Hours of Seamless Storytelling",
     inclusions: [
-      "Full photographic coverage by Starline lead artist",
-      "Curated high-resolution digital gallery (400+ hand-finished frames)",
-      "Full personal printing and digital sharing rights",
-      "Custom timeline architecture & location lighting roadmap",
+      "Full photographic or cinema coverage by Starline senior artist",
+      "Curated high-resolution digital master gallery (400+ hand-finished frames)",
+      "Full personal printing rights & archival digital downloads",
+      "Custom timeline consultation & lighting roadmap",
       "Private online proofing gallery with archival print store",
       "Delivered within 4–6 weeks with 48-hour sneak preview"
     ],
@@ -216,38 +216,39 @@ export const investmentTiers: InvestmentTier[] = [
   },
   {
     id: "full-day",
-    name: "The Full Story & Escape",
-    tagline: "Our signature all-day experience documenting the entire arc from morning preparations to late-night dinner.",
+    name: "Dual Atelier Signature (Photo + Video)",
+    tagline: "Our premier comprehensive experience combining full-day photography, cinematic wedding film, and complimentary global live streaming.",
     price: "$5,200",
     featured: true,
-    coverage: "Up to 9 Hours of Comprehensive Coverage",
+    coverage: "Up to 9 Hours of Comprehensive Dual Coverage",
     inclusions: [
-      "Lead artist + dedicated second photographer",
-      "Hybrid capture: 35mm Analog Film rolls + Medium Format Digital",
-      "Curated gallery of 700+ hand-toned, timeless images",
+      "Lead artist + dedicated second photographer & cinematographer",
+      "SPECIAL OFFER: Complimentary High-Definition Live Streaming Broadcast included",
+      "Hybrid capture: 35mm Analog Film rolls + 4K Cinema + Medium Format Digital",
+      "Curated gallery of 700+ hand-toned, timeless images + Full Feature Cinema Film",
       "Custom linen keepsake box containing 50 fine-art archival prints",
       "Complimentary golden-hour engagement or portrait session",
-      "All travel expenses included within California, Utah, and Nevada",
+      "All travel expenses included within Dallas-Fort Worth & regional venues",
       "48-hour signature preview story deck"
     ],
     recommendedFor: "Those who want every laughter, whisper, landscape nuance, and celebration moment preserved without looking at the clock."
   },
   {
     id: "destination",
-    name: "The Destination & Multi-Day",
-    tagline: "Multi-day narrative for weekend getaways, American coast celebrations, and backcountry expeditions.",
+    name: "The Destination & Luxury Multi-Day",
+    tagline: "Complete multi-day narrative for luxury destination celebrations, weekend voyages, and multi-ceremony heritage weddings.",
     price: "$7,800",
     coverage: "Two Days / Multi-Event Complete Story",
     inclusions: [
-      "Welcome dinner / rehearsal gathering + Full Wedding Day coverage",
-      "Dual-artist team with unlimited film rolls & medium format gear",
-      "1,000+ hand-crafted digital frames delivered in full resolution",
+      "Welcome dinner / Sangeet / Rehearsal + Full Wedding Day & Reception coverage",
+      "Dual-artist master team with unlimited 35mm film rolls & 4K cinema gear",
+      "Complimentary Multi-Camera Global Live Streaming for international family",
+      "1,000+ hand-crafted digital frames delivered in full resolution + Feature Film",
       "Custom 12x12 bespoke Italian-bound linen heirloom wedding album",
-      "Full drone aerial topography & landscape environmental frames",
-      "All domestic travel and lodging completely included",
+      "Full drone aerial topography & landscape environmental cinema",
       "Priority artisan delivery within 3 weeks"
     ],
-    recommendedFor: "Destination celebrations where the journey and environment are as central as the vow exchange."
+    recommendedFor: "Destination & luxury heritage celebrations where the journey, culture, and loved ones are as central as the vow exchange."
   },
   {
     id: "editorial",
@@ -292,8 +293,18 @@ export const experienceSteps = [
 
 export const faqItems: FAQItem[] = [
   {
+    question: "Why choose Starline Studios?",
+    answer: "With over 35 years of experience and four generations of family craftsmanship, Starline combines deep artistic tradition, unhurried presence, and state-of-the-art cinema technology. We offer personalized service, an unobtrusive documentary eye, and flexible bespoke packages tailored to every celebration budget.",
+    category: "Heritage & Vision"
+  },
+  {
+    question: "Do you provide live streaming for our event?",
+    answer: "Yes! High-definition digital live streaming is complimentary when you book both photography and videography packages together, allowing family, grandparents, and loved ones across the globe to experience your celebration in real time.",
+    category: "Services & Privileges"
+  },
+  {
     question: "What is your approach on the wedding day?",
-    answer: "I believe the best photographs occur when you feel completely present in your experience. I balance artful, editorial guidance during portrait sessions with an unobtrusive, documentary eye during the ceremony and reception so you can savor every second with your guests.",
+    answer: "We believe the best photographs and films occur when you feel completely present in your experience. We balance artful, editorial guidance during portrait sessions with an unobtrusive, documentary eye during the ceremony and reception so you can savor every second with your guests.",
     category: "Booking"
   },
   {
@@ -369,6 +380,14 @@ export const studioProcessSteps: ProcessStep[] = [
 ];
 
 export const studioFaqs: FaqItem[] = [
+  {
+    question: "Why choose Starline Studios?",
+    answer: "Starline Studios is a fourth-generation family-owned atelier with over 35 years of visual storytelling expertise. We unite generational craftsmanship, creative intuition, and state-of-the-art 4K cinema and 35mm analog film technology. We work attentively with each couple's vision to craft customized packages for every celebration budget."
+  },
+  {
+    question: "Do you provide complimentary live streaming?",
+    answer: "Yes. When you commission both photography and videography collections together, comprehensive multi-camera digital live streaming is provided with our compliments, enabling overseas and remote loved ones to celebrate with you live."
+  },
   {
     question: "How would you describe your visual approach?",
     answer: "Our style is rooted in natural light, documentary observation, and the timeless organic texture of 35mm film. We prioritize unrehearsed emotion and quiet nuance over stiff, performative poses."

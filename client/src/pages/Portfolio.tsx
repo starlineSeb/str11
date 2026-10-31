@@ -196,14 +196,14 @@ export default function Portfolio() {
 
               <div className="mucha-about-text-wrap">
                 <p className="mucha-about-paragraph">
-                  Starline Atelier is an independent cinematic atelier dedicated to the craft of living wedding film and authentic analog emulsion photography. Founded on the belief that true romance requires both medium format clarity and raw, unrehearsed emotion.
+                  Starline Studios is a fourth-generation family-owned atelier with over 35 years of visual storytelling heritage. We provide bespoke fine-art photography and cinematic videography for all wedding styles—from intimate celebrations, engagement sessions, and church directory gatherings to grand luxury estate weddings and worldwide destination celebrations.
                 </p>
                 <p className="mucha-about-paragraph">
-                  Our commissions encompass multi-day celebrations across Newport oceanfront mansions, Napa Valley vineyards, Big Sur coastal cliffs, and Santa Barbara estates. Every film is accompanied by dedicated archival prints and bespoke acoustic scores.
+                  Every package is customized to meet your unique celebration needs and vision without compromising quality. As a signature studio privilege, all dual photography and videography commissions receive complimentary broadcast-grade live streaming coverage so overseas and remote loved ones can share in your celebration.
                 </p>
                 <p className="mucha-about-hours">
-                  Philadelphia Atelier &amp; Destination Commissions nationwide.<br />
-                  Limited to 18 couples per calendar season.
+                  Dallas Atelier &amp; Destination Commissions worldwide.<br />
+                  35+ Years in Business // Fourth-Generation Family Studio.
                 </p>
               </div>
             </div>
