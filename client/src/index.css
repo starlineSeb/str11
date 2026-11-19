@@ -6520,6 +6520,31 @@ button,
 
 /* Mobile & Tablet Navigation Drawer (<= 960px) */
 @media (max-width: 960px) {
+  html,
+  body,
+  #root,
+  .starline-page-shell,
+  .starline-page-main {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  .dallas-about-grid,
+  .gione-featured-duo,
+  .gione-featured-duo.is-reversed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dallas-about-grid > *,
+  .gione-featured-duo > *,
+  .exact-footer-grid > *,
+  .gds-owner-grid > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
   .starline-global-header {
     padding: calc(14px + env(safe-area-inset-top, 0px)) 20px 14px;
   }
@@ -6666,44 +6691,103 @@ button,
     transform: none;
   }
 
-  /* Investment Page: Place Price & Reserve CTA Immediately Below Tier Name */
-  .minimal-tier-row {
+  /* Investment Page: Clean Luxury Editorial Cards on Mobile */
+  .minimal-pricing-list {
+    gap: 22px;
+  }
+
+  .minimal-tier-row,
+  .minimal-tier-row:first-child {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 32px 0;
+    padding: 26px 20px;
+    background: #faf9f6;
+    border: 1px solid rgba(17, 17, 19, 0.09);
+    border-radius: 4px;
   }
 
   .minimal-tier-left {
-    order: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .minimal-tier-left span {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--cobalt-accent);
+  }
+
+  .minimal-tier-left h3 {
+    font-size: clamp(23px, 6.2vw, 28px);
+    line-height: 1.12;
+    margin: 0;
+    color: #111113;
+  }
+
+  .minimal-tier-center p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #4a4a52;
+    margin: 0 0 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(17, 17, 19, 0.07);
+  }
+
+  .minimal-tier-inclusions {
+    gap: 10px;
+  }
+
+  .minimal-tier-inclusions li {
+    align-items: flex-start;
+    line-height: 1.5;
+    font-size: 13px;
+    color: #2c2c34;
   }
 
   .minimal-tier-right {
-    order: 2;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    gap: 4px;
     width: 100%;
-    padding: 14px 16px;
-    background: var(--bg-soft);
-    border: 1px solid var(--line-subtle);
-    border-radius: 3px;
+    padding-top: 18px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(17, 17, 19, 0.08);
   }
 
   .minimal-tier-price {
-    font-size: clamp(28px, 7vw, 36px);
+    font-size: clamp(32px, 8vw, 40px);
+    color: #111113;
+    line-height: 1;
   }
 
   .minimal-tier-price-sub {
-    margin: 0;
-    width: 100%;
-    order: 3;
+    font-size: 11px;
+    color: #71717a;
+    margin: 2px 0 14px;
   }
 
-  .minimal-tier-center {
-    order: 3;
+  .minimal-text-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    padding: 14px 24px;
+    background: #111113;
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    text-decoration: none;
   }
 
   /* Journal Page: Stack Image Cleanly Above Story Panel on Mobile */
@@ -6745,39 +6829,68 @@ button,
   .minimal-hero {
     height: 82svh;
     min-height: 460px;
-    padding: 88px 20px 28px;
+    padding: 88px 18px 28px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .minimal-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(8, 15, 26, 0.58) 0%,
+      rgba(8, 15, 26, 0.08) 32%,
+      rgba(8, 15, 26, 0.18) 58%,
+      rgba(8, 15, 26, 0.82) 100%
+    );
   }
 
   .minimal-hero-content {
-    padding: 0 8px;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 4px;
     margin-bottom: 8px;
   }
 
   .minimal-hero-title {
-    font-size: clamp(1.35rem, 5.5vw, 1.85rem);
-    letter-spacing: 0.14em;
-    line-height: 1.3;
+    font-size: clamp(1.25rem, 5.2vw, 1.75rem);
+    letter-spacing: 0.12em;
+    line-height: 1.32;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .minimal-hero-kicker {
     font-size: 8.5px;
-    letter-spacing: 0.18em;
-    line-height: 1.6;
+    letter-spacing: 0.15em;
+    line-height: 1.65;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .starline-privilege-callout-banner {
-    padding: 14px 18px;
+    padding: 14px 16px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .starline-privilege-callout-inner {
     flex-direction: column;
     gap: 8px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .privilege-text {
     font-size: 10.5px;
     line-height: 1.55;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .privilege-link {
@@ -6788,33 +6901,41 @@ button,
   }
 
   .starline-welcome-writing-banner {
-    padding: 44px 20px 36px;
+    padding: 44px 18px 36px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .welcome-typewriter-wrap {
     min-height: 48px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .welcome-typewriter-text {
-    font-size: clamp(1.45rem, 6.4vw, 2.2rem);
+    font-size: clamp(1.35rem, 6vw, 2.1rem);
     letter-spacing: 0.04em;
     flex-wrap: wrap;
     justify-content: center;
     text-align: center;
+    max-width: 100%;
   }
 
   .welcome-sub-note {
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    line-height: 1.6;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    line-height: 1.65;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .dallas-about-section {
-    padding: 48px 20px;
+    padding: 48px 18px;
   }
 
   .dallas-about-heading {
-    font-size: clamp(1.75rem, 6.8vw, 2.3rem);
+    font-size: clamp(1.7rem, 6.5vw, 2.25rem);
     line-height: 1.12;
     margin: 10px 0 18px;
   }
@@ -6832,14 +6953,14 @@ button,
 
   .dallas-about-badges-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px 12px;
     padding: 18px 0;
     margin-bottom: 24px;
   }
 
   .badge-val {
-    font-size: 15px;
+    font-size: 14.5px;
   }
 
   .dallas-about-cta-wrap .minimal-btn-solid {
@@ -6849,17 +6970,21 @@ button,
   }
 
   .gione-featured-section {
-    padding: 48px 20px;
+    padding: 48px 18px;
   }
 
   .gione-featured-header .minimal-section-title {
-    font-size: clamp(1.85rem, 7vw, 2.4rem);
+    font-size: clamp(1.8rem, 6.8vw, 2.35rem);
   }
 
   .gione-slideshow-col,
   .gione-slideshow-container {
-    min-height: 240px;
-    aspect-ratio: 16 / 10;
+    width: 100%;
+    min-width: 0;
+    height: 56vw;
+    min-height: 200px;
+    max-height: 280px;
+    aspect-ratio: auto;
   }
 
   .gione-slideshow-tag {
@@ -7008,16 +7133,20 @@ button,
     padding: 48px 20px;
   }
 
-  /* 3. Contact Page Mobile Optimization (Instant Form Visibility Above the Fold) */
+  /* 3. Contact Page Mobile Optimization (Full Portrait Framing + Immediate Form Visibility) */
   .gione-contact-full-wrapper {
     padding-top: 68px;
     min-height: auto;
   }
 
   .gione-contact-full-image-col {
-    height: 26svh !important;
-    min-height: 190px !important;
-    max-height: 230px !important;
+    height: 42svh !important;
+    min-height: 290px !important;
+    max-height: 350px !important;
+  }
+
+  .gione-contact-full-image {
+    object-position: center 42% !important;
   }
 
   .gione-contact-image-badge {
@@ -7077,6 +7206,19 @@ button,
   }
 
   /* 4. Portfolio, Videography, Photography & Investment Subpages */
+  .minimal-section {
+    padding: 40px 18px;
+  }
+
+  .minimal-quote-section {
+    padding: 48px 20px;
+  }
+
+  .minimal-quote-text {
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
   .portfolio-hero {
     padding: 104px 20px 32px;
   }
