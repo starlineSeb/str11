@@ -190,6 +190,8 @@ export default function Contact() {
                   <input
                     type="text"
                     required
+                    autoComplete="name"
+                    enterKeyHint="next"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="exact-underline-input"
@@ -204,6 +206,11 @@ export default function Contact() {
                   <input
                     type="email"
                     required
+                    inputMode="email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    autoComplete="email"
+                    enterKeyHint="next"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="exact-underline-input"
@@ -218,6 +225,11 @@ export default function Contact() {
                   <input
                     type="email"
                     required
+                    inputMode="email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    autoComplete="email"
+                    enterKeyHint="next"
                     value={formData.confirmEmail}
                     onChange={(e) => setFormData({ ...formData, confirmEmail: e.target.value })}
                     className="exact-underline-input"
@@ -232,6 +244,9 @@ export default function Contact() {
                   <input
                     type="tel"
                     required
+                    inputMode="tel"
+                    autoComplete="tel"
+                    enterKeyHint="next"
                     value={formData.contactNumber}
                     onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
                     className="exact-underline-input"
@@ -348,6 +363,9 @@ export default function Contact() {
                   </label>
                   <input
                     type="text"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    enterKeyHint="next"
                     value={formData.instagram}
                     onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
                     className="exact-underline-input"
@@ -361,6 +379,7 @@ export default function Contact() {
                   </label>
                   <input
                     type="text"
+                    enterKeyHint="send"
                     value={formData.referralSource}
                     onChange={(e) => setFormData({ ...formData, referralSource: e.target.value })}
                     className="exact-underline-input"

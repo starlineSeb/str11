@@ -151,6 +151,8 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
               <form onSubmit={handleSubscribe} className="exact-subscribe-form">
                 <input
                   type="text"
+                  autoComplete="given-name"
+                  enterKeyHint="next"
                   placeholder="FIRST NAME"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -159,6 +161,8 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
                 />
                 <input
                   type="text"
+                  autoComplete="family-name"
+                  enterKeyHint="next"
                   placeholder="LAST NAME"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
@@ -167,6 +171,11 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
                 />
                 <input
                   type="email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  autoComplete="email"
+                  enterKeyHint="send"
                   placeholder="EMAIL ADDRESS"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

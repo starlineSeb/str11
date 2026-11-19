@@ -474,6 +474,8 @@ export default function Home() {
                     <label className="appointment-field-label">FULL NAME *</label>
                     <input
                       type="text"
+                      autoComplete="name"
+                      enterKeyHint="next"
                       placeholder="e.g. Victoria Sterling"
                       value={modalForm.fullName}
                       onChange={(e) => setModalForm({ ...modalForm, fullName: e.target.value })}
@@ -487,6 +489,9 @@ export default function Home() {
                       <label className="appointment-field-label">PHONE NUMBER *</label>
                       <input
                         type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        enterKeyHint="next"
                         placeholder="+1 (555) 000-0000"
                         value={modalForm.phoneNumber}
                         onChange={(e) => setModalForm({ ...modalForm, phoneNumber: e.target.value })}
@@ -499,6 +504,11 @@ export default function Home() {
                       <label className="appointment-field-label">EMAIL ADDRESS *</label>
                       <input
                         type="email"
+                        inputMode="email"
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        autoComplete="email"
+                        enterKeyHint="next"
                         placeholder="victoria@sterling.com"
                         value={modalForm.emailAddress}
                         onChange={(e) => setModalForm({ ...modalForm, emailAddress: e.target.value })}
@@ -513,6 +523,7 @@ export default function Home() {
                       <label className="appointment-field-label">WEDDING DESTINATION *</label>
                       <input
                         type="text"
+                        enterKeyHint="next"
                         placeholder="e.g. Dallas, TX or Newport, RI"
                         value={modalForm.destination}
                         onChange={(e) => setModalForm({ ...modalForm, destination: e.target.value })}
@@ -525,6 +536,7 @@ export default function Home() {
                       <label className="appointment-field-label">ESTIMATED WEDDING DATE *</label>
                       <input
                         type="text"
+                        enterKeyHint="send"
                         placeholder="e.g. October 2026"
                         value={modalForm.weddingDate}
                         onChange={(e) => setModalForm({ ...modalForm, weddingDate: e.target.value })}

@@ -6447,4 +6447,809 @@ a {
   margin: 0;
 }
 
+/* ==========================================================================
+   9. MOBILE-NATIVE & RESPONSIVE ARCHITECTURE OVERHAUL
+      Strictly scoped to mobile viewports & touch capabilities.
+      Zero changes to Desktop (> 960px with fine pointer).
+   ========================================================================== */
+
+/* Mobile-Native Platform Floor: Tap Highlight, Font Inflation & Control Selection */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+[role="button"],
+.starline-mobile-toggle,
+.starline-mobile-nav-item,
+.starline-mob-subitem,
+.portfolio-filter-tab,
+.portfolio-filter-btn,
+.gione-slide-dot,
+.minimal-btn-solid,
+.gione-story-btn,
+.gds-contact-btn,
+.exact-gione-btn,
+.exact-gione-btn-outline,
+.exact-subscribe-button,
+.appointment-submit-button {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Coarse Pointer (Touch Devices): Prevent iOS Safari Auto-Zoom on Input Focus & Add Press Feedback */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select,
+  .exact-underline-input,
+  .exact-underline-textarea,
+  .appointment-modal-input,
+  .exact-subscribe-input {
+    font-size: 16px !important;
+  }
+
+  button:active,
+  [role="button"]:active,
+  .minimal-btn-solid:active,
+  .gione-story-btn:active,
+  .gds-contact-btn:active,
+  .exact-gione-btn:active,
+  .exact-gione-btn-outline:active,
+  .exact-subscribe-button:active,
+  .appointment-submit-button:active,
+  .portfolio-filter-tab:active,
+  .portfolio-filter-btn:active,
+  .starline-mobile-toggle:active {
+    transform: scale(0.97);
+    transition: transform 100ms ease-out;
+  }
+}
+
+/* Prevent Sticky Hover Transforms on Touch Screens */
+@media (hover: none) {
+  .gds-why-card:hover,
+  .mucha-art-card:hover,
+  .gione-story-btn:hover {
+    transform: none;
+  }
+}
+
+/* Mobile & Tablet Navigation Drawer (<= 960px) */
+@media (max-width: 960px) {
+  .starline-global-header {
+    padding: calc(14px + env(safe-area-inset-top, 0px)) 20px 14px;
+  }
+
+  .starline-global-header.is-scrolled,
+  .starline-global-header.variant-light {
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 12px;
+  }
+
+  .starline-global-header.is-menu-open {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+    z-index: 110;
+  }
+
+  .starline-brand-box {
+    gap: 12px;
+  }
+
+  .starline-brand-logo-img,
+  .starline-global-header.is-scrolled .starline-brand-logo-img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .starline-brand-title {
+    font-size: 17px;
+    letter-spacing: 0.18em;
+  }
+
+  .starline-brand-sub {
+    font-size: 7px;
+    letter-spacing: 0.22em;
+    margin-top: 2px;
+  }
+
+  .starline-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -6px;
+    color: #ffffff;
+    border-radius: 4px;
+  }
+
+  .starline-mobile-drawer {
+    height: 100vh;
+    height: 100dvh;
+    z-index: 105;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: calc(88px + env(safe-area-inset-top, 0px)) 24px calc(32px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .starline-mobile-drawer-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    gap: 32px;
+  }
+
+  .starline-mobile-nav-list {
+    gap: 4px;
+  }
+
+  .starline-mobile-nav-item {
+    font-size: clamp(22px, 6vw, 28px);
+    padding: 14px 0;
+  }
+
+  /* Restore grand editorial display typography inside mobile nav span */
+  .starline-mobile-nav-item span {
+    font-family: var(--font-display-condensed);
+    font-size: inherit;
+    color: #ffffff;
+    letter-spacing: 0.1em;
+  }
+
+  .starline-mobile-nav-item.is-active,
+  .starline-mobile-nav-item.is-active span {
+    color: var(--luxury-blue-sky);
+  }
+
+  .starline-mob-sublist {
+    padding-left: 16px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    gap: 4px;
+  }
+
+  .starline-mob-subitem {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 6px 0;
+    font-size: 12.5px;
+    color: var(--luxury-blue-muted);
+  }
+
+  .starline-mob-subitem.is-active {
+    color: #ffffff;
+  }
+
+  .starline-mobile-footer-info {
+    padding-top: 20px;
+    border-top: 1px solid var(--luxury-blue-line);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .starline-mobile-footer-info p {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--luxury-blue-muted);
+  }
+}
+
+/* Tablet & Mobile Structural Fixes (<= 860px) */
+@media (max-width: 860px) {
+  /* About Page: Fix Founder 2-Column Squish Bug */
+  .gds-owner-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .gds-owner-photo-box {
+    max-width: 420px;
+    margin: 0 auto;
+    aspect-ratio: 4 / 4.6;
+  }
+
+  /* About Page: Prevent Hero Center Text from Translating Over Subtext */
+  .gds-hero-center-box {
+    transform: none;
+  }
+
+  /* Investment Page: Place Price & Reserve CTA Immediately Below Tier Name */
+  .minimal-tier-row {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 32px 0;
+  }
+
+  .minimal-tier-left {
+    order: 1;
+  }
+
+  .minimal-tier-right {
+    order: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line-subtle);
+    border-radius: 3px;
+  }
+
+  .minimal-tier-price {
+    font-size: clamp(28px, 7vw, 36px);
+  }
+
+  .minimal-tier-price-sub {
+    margin: 0;
+    width: 100%;
+    order: 3;
+  }
+
+  .minimal-tier-center {
+    order: 3;
+  }
+
+  /* Journal Page: Stack Image Cleanly Above Story Panel on Mobile */
+  .hover-sliding-card {
+    height: auto !important;
+    min-height: 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hover-sliding-card .sliding-image-layer,
+  .hover-sliding-card.slide-to-left.is-hovered .sliding-image-layer,
+  .hover-sliding-card.slide-to-right.is-hovered .sliding-image-layer {
+    position: relative !important;
+    height: 240px !important;
+    transform: none !important;
+  }
+
+  .sliding-hint-pill {
+    display: none !important;
+  }
+
+  .sliding-story-panel {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 24px 20px !important;
+  }
+
+  .sliding-story-content {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Primary Smartphone Viewport Optimizations (<= 768px) */
+@media (max-width: 768px) {
+  /* 1. Home Page: Hero, Callout Banner, Typewriter, Badges & Duos */
+  .minimal-hero {
+    height: 82svh;
+    min-height: 460px;
+    padding: 88px 20px 28px;
+  }
+
+  .minimal-hero-content {
+    padding: 0 8px;
+    margin-bottom: 8px;
+  }
+
+  .minimal-hero-title {
+    font-size: clamp(1.35rem, 5.5vw, 1.85rem);
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+  }
+
+  .minimal-hero-kicker {
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
+    line-height: 1.6;
+  }
+
+  .starline-privilege-callout-banner {
+    padding: 14px 18px;
+  }
+
+  .starline-privilege-callout-inner {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .privilege-text {
+    font-size: 10.5px;
+    line-height: 1.55;
+    letter-spacing: 0.08em;
+  }
+
+  .privilege-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 4px 10px;
+  }
+
+  .starline-welcome-writing-banner {
+    padding: 44px 20px 36px;
+  }
+
+  .welcome-typewriter-wrap {
+    min-height: 48px;
+  }
+
+  .welcome-typewriter-text {
+    font-size: clamp(1.45rem, 6.4vw, 2.2rem);
+    letter-spacing: 0.04em;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .welcome-sub-note {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    line-height: 1.6;
+  }
+
+  .dallas-about-section {
+    padding: 48px 20px;
+  }
+
+  .dallas-about-heading {
+    font-size: clamp(1.75rem, 6.8vw, 2.3rem);
+    line-height: 1.12;
+    margin: 10px 0 18px;
+  }
+
+  .dallas-about-lead {
+    font-size: 14.5px;
+    line-height: 1.75;
+  }
+
+  .dallas-about-body {
+    font-size: 13.5px;
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+
+  .dallas-about-badges-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 14px;
+    padding: 18px 0;
+    margin-bottom: 24px;
+  }
+
+  .badge-val {
+    font-size: 15px;
+  }
+
+  .dallas-about-cta-wrap .minimal-btn-solid {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .gione-featured-section {
+    padding: 48px 20px;
+  }
+
+  .gione-featured-header .minimal-section-title {
+    font-size: clamp(1.85rem, 7vw, 2.4rem);
+  }
+
+  .gione-slideshow-col,
+  .gione-slideshow-container {
+    min-height: 240px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .gione-slideshow-tag {
+    top: 14px;
+    left: 14px;
+    font-size: 8px;
+    padding: 5px 12px;
+  }
+
+  .gione-slideshow-dots {
+    bottom: 14px;
+    right: 14px;
+  }
+
+  .gione-story-col {
+    min-height: auto;
+    padding: 28px 22px;
+  }
+
+  .gione-story-heading {
+    font-size: clamp(1.55rem, 6vw, 2rem);
+  }
+
+  .gione-story-btn {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+
+  .starline-appointment-section {
+    padding: 48px 16px;
+  }
+
+  .starline-appointment-card {
+    padding: 32px 20px;
+  }
+
+  .starline-appointment-title {
+    font-size: clamp(1.75rem, 6.5vw, 2.3rem);
+  }
+
+  .starline-appointment-subtitle {
+    font-size: 13.5px;
+    margin-bottom: 24px;
+  }
+
+  .starline-appointment-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 12px;
+    margin-bottom: 24px;
+  }
+
+  .starline-appointment-btn-wrap,
+  .appointment-book-trigger {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .appointment-modal-backdrop {
+    padding: 16px;
+    overscroll-behavior: contain;
+  }
+
+  .appointment-modal-box {
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 28px 20px;
+  }
+
+  /* 2. About Page Mobile Refinements */
+  .gds-hero-section {
+    min-height: 78svh;
+    height: auto;
+    padding: 100px 20px 48px;
+  }
+
+  .gds-hero-content-container {
+    padding: 0 8px;
+  }
+
+  .gds-hero-main-title {
+    font-size: clamp(1.4rem, 5.6vw, 2rem);
+    line-height: 1.35;
+  }
+
+  .gds-owner-section {
+    padding: 48px 20px;
+  }
+
+  .gds-owner-badges {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .gds-contact-btn {
+    width: 100%;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .gds-why-choose-section {
+    padding: 48px 20px;
+  }
+
+  .gds-why-choose-title {
+    font-size: clamp(1.8rem, 6.5vw, 2.4rem);
+  }
+
+  .gds-why-card {
+    padding: 22px 20px;
+  }
+
+  .gds-logos-section {
+    padding: 44px 20px;
+  }
+
+  .gds-quote-parallax-section {
+    height: auto;
+    min-height: 420px;
+    padding: 36px 20px;
+    gap: 28px;
+  }
+
+  .gds-quote-content-container {
+    gap: 28px;
+  }
+
+  .gds-testimonial-box {
+    align-self: stretch;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .gds-quote-bottom-title {
+    font-size: clamp(1.45rem, 6vw, 2.1rem);
+  }
+
+  .gds-portfolio-links-section {
+    padding: 48px 20px;
+  }
+
+  /* 3. Contact Page Mobile Optimization (Instant Form Visibility Above the Fold) */
+  .gione-contact-full-wrapper {
+    padding-top: 68px;
+    min-height: auto;
+  }
+
+  .gione-contact-full-image-col {
+    height: 26svh !important;
+    min-height: 190px !important;
+    max-height: 230px !important;
+  }
+
+  .gione-contact-image-badge {
+    bottom: 14px;
+    left: 16px;
+    padding: 6px 12px;
+    font-size: 7.5px;
+  }
+
+  .exact-gione-form-area {
+    padding: 28px 20px 56px;
+  }
+
+  .exact-gione-header {
+    margin-bottom: 28px;
+  }
+
+  .exact-gione-title {
+    font-size: clamp(1.75rem, 6.8vw, 2.2rem);
+    margin-bottom: 12px;
+  }
+
+  .exact-gione-intro {
+    font-size: 13px;
+    line-height: 1.75;
+    margin-bottom: 20px;
+  }
+
+  .exact-gione-direct-line {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .exact-gione-form {
+    gap: 24px;
+  }
+
+  .exact-radio-options-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .exact-radio-item {
+    padding: 12px 14px;
+    border: 1px solid #e4e4e7;
+    border-radius: 3px;
+    min-height: 46px;
+  }
+
+  .exact-gione-btn,
+  .exact-gione-btn-outline {
+    width: 100%;
+    min-height: 50px;
+    justify-content: center;
+  }
+
+  /* 4. Portfolio, Videography, Photography & Investment Subpages */
+  .portfolio-hero {
+    padding: 104px 20px 32px;
+  }
+
+  .portfolio-title {
+    font-size: clamp(1.9rem, 7.2vw, 2.6rem);
+    line-height: 1.05;
+  }
+
+  .portfolio-subtitle {
+    font-size: 13.5px;
+    margin-bottom: 24px;
+  }
+
+  .mucha-hero-section {
+    padding-top: 92px;
+  }
+
+  .mucha-hero-left {
+    padding: 16px 0 32px;
+  }
+
+  .mucha-hero-display-title {
+    font-size: clamp(2.1rem, 8.5vw, 3rem);
+    margin-bottom: 24px;
+  }
+
+  .mucha-hero-right {
+    min-height: 260px;
+  }
+
+  .mucha-about-section,
+  .mucha-exhibition-section,
+  .mucha-location-section {
+    padding: 48px 20px;
+  }
+
+  .mucha-about-display-title,
+  .mucha-exhibition-title {
+    font-size: clamp(2rem, 7.5vw, 2.8rem);
+  }
+
+  .mucha-location-left {
+    padding: 28px 20px;
+  }
+
+  .mucha-location-right {
+    min-height: 260px;
+  }
+
+  .portfolio-hero-section {
+    height: 62svh;
+    min-height: 380px;
+    padding-top: 64px;
+  }
+
+  .portfolio-hero-title {
+    font-size: clamp(1.75rem, 6.8vw, 2.4rem);
+  }
+
+  .portfolio-filter-bar-section {
+    top: 68px;
+    padding: 12px 16px;
+  }
+
+  .portfolio-filter-container {
+    justify-content: flex-start;
+  }
+
+  .portfolio-filter-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .portfolio-filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .portfolio-filter-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .portfolio-gallery-section,
+  .portfolio-grid-section {
+    padding: 36px 20px 64px;
+  }
+
+  /* Eliminate all 360px/380px/460px minmax grid horizontal blowouts */
+  .gione-video-grid-2col,
+  .portfolio-video-grid-2col,
+  .portfolio-photo-grid,
+  .portfolio-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px;
+  }
+
+  .portfolio-photo-inner,
+  .portfolio-photo-card.aspect-tall .portfolio-photo-inner {
+    min-height: 300px;
+    aspect-ratio: 4 / 4.5;
+  }
+
+  /* 5. Story Modals & Video Lightbox on Mobile */
+  .story-modal-backdrop,
+  .starline-lightbox-backdrop {
+    padding: 16px;
+    overscroll-behavior: contain;
+  }
+
+  .story-modal-header {
+    padding: 20px 20px 16px;
+  }
+
+  .story-modal-title {
+    font-size: clamp(1.4rem, 5.5vw, 1.85rem);
+  }
+
+  .story-modal-body {
+    padding: 20px;
+  }
+
+  .story-modal-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .starline-lightbox-close {
+    top: calc(16px + env(safe-area-inset-top, 0px));
+    right: 16px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .starline-lightbox-caption-bar,
+  .starline-video-modal-caption-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px;
+  }
+}
+
+/* Compact Footer 2-Column Editorial Index on Smartphones (<= 640px) */
+@media (max-width: 640px) {
+  .exact-footer-main-container {
+    padding: 24px 20px 28px;
+  }
+
+  .exact-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 16px;
+  }
+
+  .exact-col-brand,
+  .exact-col-subscribe {
+    grid-column: 1 / -1;
+  }
+
+  .exact-subscribe-input,
+  .exact-subscribe-button {
+    min-height: 46px;
+  }
+}
+
+
 

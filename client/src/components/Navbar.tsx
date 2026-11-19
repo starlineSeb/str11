@@ -28,6 +28,14 @@ export default function Navbar({ variant = "dark" }: NavbarProps) {
     window.scrollTo(0, 0);
   }, [location]);
 
+  // Prevent background page scroll when mobile drawer is open
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
@@ -49,7 +57,7 @@ export default function Navbar({ variant = "dark" }: NavbarProps) {
   return (
     <>
       <header
-        className={`starline-global-header ${isScrolled ? "is-scrolled" : ""} variant-${variant}`}
+        className={`starline-global-header ${isScrolled ? "is-scrolled" : ""} ${mobileMenuOpen ? "is-menu-open" : ""} variant-${variant}`}
       >
         <div className="starline-header-inner">
           <Link href="/" className="starline-brand-box">
@@ -162,6 +170,7 @@ export default function Navbar({ variant = "dark" }: NavbarProps) {
                       <Link
                         href={link.href}
                         className={`starline-mobile-nav-item ${isActive ? "is-active" : ""}`}
+                        onClick={() => setMobileMenuOpen(false)}
                       >
                         <span>{link.label}</span>
                         <ArrowUpRight size={15} />
@@ -174,6 +183,7 @@ export default function Navbar({ variant = "dark" }: NavbarProps) {
                               key={sub.href}
                               href={sub.href}
                               className={`starline-mob-subitem ${location === sub.href ? "is-active" : ""}`}
+                              onClick={() => setMobileMenuOpen(false)}
                             >
                               <span>— {sub.label}</span>
                             </Link>
