@@ -5244,13 +5244,69 @@ a {
 .exact-footer-socials a {
   color: #333333;
   text-decoration: none;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  transition: color 0.2s ease;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
 
-.exact-footer-socials a:hover {
-  color: #000000;
+.social-brand-link.is-instagram {
+  gap: 10px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.social-brand-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17, 17, 19, 0.06);
+  color: #222222;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.social-brand-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #333333;
+  transition: color 0.25s ease;
+}
+
+.social-brand-link.is-instagram:hover,
+.social-brand-link.is-instagram:focus-visible,
+.social-brand-link.is-instagram:active {
+  background: rgba(214, 36, 159, 0.06);
+  border-color: rgba(214, 36, 159, 0.18);
+  transform: translateY(-1px);
+}
+
+.social-brand-link.is-instagram:hover .social-brand-icon-box,
+.social-brand-link.is-instagram:focus-visible .social-brand-icon-box,
+.social-brand-link.is-instagram:active .social-brand-icon-box {
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(214, 36, 159, 0.35);
+  transform: scale(1.05);
+}
+
+.social-brand-link.is-instagram:hover .social-brand-label,
+.social-brand-link.is-instagram:focus-visible .social-brand-label,
+.social-brand-link.is-instagram:active .social-brand-label,
+.exact-footer-handle-link:hover {
+  color: #d6249f;
 }
 
 .exact-footer-monogram {
