@@ -1,8 +1,15 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import {
-  DEFAULT_PHOTOGRAPHY_ITEMS,
-  DEFAULT_VIDEOGRAPHY_ITEMS,
+  getConvexUrl,
+  getLockoutStatus,
+  isAdminAuthenticated,
+  logoutAdmin,
+  subscribeToAdminAuth,
+  updateAdminPasscode,
+  verifyAndLoginAdmin
+} from "@/lib/adminAuth";
+import {
   formatTitleFromFilename,
   getPhotographyItems,
   getVideographyItems,
@@ -13,6 +20,7 @@ import {
   savePhotographyItems,
   saveVideographyItems,
   subscribeToPortfolioUpdates,
+  syncPortfoliosFromConvex,
   type PhotoItem,
   type PortfolioCategory,
   type VideoFilmItem
@@ -24,13 +32,19 @@ import {
   ArrowUpRight,
   Camera,
   Check,
+  Cloud,
   Edit3,
   Eye,
+  EyeOff,
   Film,
   ImagePlus,
+  KeyRound,
+  Lock,
+  LogOut,
   MapPin,
   Plus,
   RotateCcw,
+  ShieldCheck,
   Sparkles,
   Trash2,
   Upload,
@@ -43,6 +57,29 @@ import { Link } from "wouter";
 type ActiveSection = "photography" | "videography";
 
 export default function AdminPanel() {
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => isAdminAuthenticated());
+  const [passcodeInput, setPasscodeInput] = useState("");
+  const [showPasscode, setShowPasscode] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [lockoutState, setLockoutState] = useState(() => getLockoutStatus());
+
+  // Security / Change Passcode modal state
+  const [isSecurityModalOpen, setIsSecurityModalOpen] = useState(false);
+  const [currentPassInput, setCurrentPassInput] = useState("");
+  const [newPassInput, setNewPassInput] = useState("");
+  const [confirmPassInput, setConfirmPassInput] = useState("");
+
+  // Convex Cloud status
+  const [convexStatus, setConvexStatus] = useState<{
+    connected: boolean;
+    convexUrl: string;
+  }>(() => ({
+    connected: Boolean(getConvexUrl()),
+    convexUrl: getConvexUrl()
+  }));
+
   const [activeSection, setActiveSection] = useState<ActiveSection>("photography");
   const [photos, setPhotos] = useState<PhotoItem[]>(() => getPhotographyItems());
   const [videos, setVideos] = useState<VideoFilmItem[]>(() => getVideographyItems());
@@ -110,12 +147,82 @@ export default function AdminPanel() {
   const replaceInputRef = useRef<HTMLInputElement>(null);
   const [replacingCardId, setReplacingCardId] = useState<string | null>(null);
 
+  // Subscribe to Auth & Portfolio updates and sync with Convex Cloud
   useEffect(() => {
-    return subscribeToPortfolioUpdates(() => {
+    void syncPortfoliosFromConvex().then((res) => {
+      setConvexStatus(res);
+    });
+
+    const unsubPortfolio = subscribeToPortfolioUpdates(() => {
       setPhotos(getPhotographyItems());
       setVideos(getVideographyItems());
     });
+    const unsubAuth = subscribeToAdminAuth(() => {
+      setIsAuthenticated(isAdminAuthenticated());
+    });
+
+    return () => {
+      unsubPortfolio();
+      unsubAuth();
+    };
   }, []);
+
+  // Lockout countdown ticker when locked out
+  useEffect(() => {
+    if (!lockoutState.isLocked) return;
+    const timer = setInterval(() => {
+      const next = getLockoutStatus();
+      setLockoutState(next);
+      if (!next.isLocked) {
+        setAuthError(null);
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockoutState.isLocked]);
+
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    setIsVerifying(true);
+    try {
+      const result = await verifyAndLoginAdmin(passcodeInput);
+      setLockoutState(getLockoutStatus());
+      if (!result.success) {
+        setAuthError(result.error || "Authentication failed.");
+      } else {
+        setPasscodeInput("");
+        setIsAuthenticated(true);
+        toast.success("Welcome to the Starline Atelier Curatorial Studio.");
+      }
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleLogout = () => {
+    logoutAdmin();
+    setIsAuthenticated(false);
+    setEditingId(null);
+    toast.success("Curatorial Console locked.");
+  };
+
+  const handleChangePasscodeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassInput.trim() !== confirmPassInput.trim()) {
+      toast.error("New passcode and confirmation do not match.");
+      return;
+    }
+    const res = await updateAdminPasscode(currentPassInput, newPassInput);
+    if (!res.success) {
+      toast.error(res.error || "Could not update passcode.");
+      return;
+    }
+    setCurrentPassInput("");
+    setNewPassInput("");
+    setConfirmPassInput("");
+    setIsSecurityModalOpen(false);
+    toast.success("Atelier Master Passcode updated.");
+  };
 
   // Process files dropped or selected into the main add zone
   const handleFilesAddedToZone = async (fileList: FileList | File[]) => {
@@ -127,7 +234,6 @@ export default function AdminPanel() {
 
     setIsProcessingImage(true);
     try {
-      // Multi-file drop OR instant publish toggle -> publish directly to active section
       if (files.length > 1 || instantPublishOnDrop) {
         if (activeSection === "photography") {
           const newItems: PhotoItem[] = [];
@@ -150,7 +256,9 @@ export default function AdminPanel() {
           savePhotographyItems(updated);
           setPhotos(updated);
           toast.success(
-            `Published ${newItems.length} ${newItems.length === 1 ? "photograph" : "photographs"} to Photography Portfolio.`
+            `Published ${newItems.length} ${
+              newItems.length === 1 ? "photograph" : "photographs"
+            } to Photography Portfolio.`
           );
         } else {
           const newFilms: VideoFilmItem[] = [];
@@ -179,11 +287,12 @@ export default function AdminPanel() {
           saveVideographyItems(updated);
           setVideos(updated);
           toast.success(
-            `Published ${newFilms.length} ${newFilms.length === 1 ? "commission cover" : "commission covers"} to Videography Portfolio.`
+            `Published ${newFilms.length} ${
+              newFilms.length === 1 ? "commission cover" : "commission covers"
+            } to Videography Portfolio.`
           );
         }
       } else {
-        // Single file drop -> Stage in live editorial preview editor
         const file = files[0];
         const optimizedDataUrl = await processUploadedImageFile(file);
         const suggestedTitle = formatTitleFromFilename(file.name);
@@ -194,14 +303,18 @@ export default function AdminPanel() {
             image: optimizedDataUrl,
             title: prev.title.trim() ? prev.title : suggestedTitle
           }));
-          toast.success("Photograph staged & calibrated. Click 'Publish to Photography' to go live.");
+          toast.success(
+            "Photograph staged & calibrated. Click 'Publish to Photography' to go live."
+          );
         } else {
           setVideoDraft((prev) => ({
             ...prev,
             coverImage: optimizedDataUrl,
             title: prev.title.trim() ? prev.title : suggestedTitle
           }));
-          toast.success("Cinema cover staged & calibrated. Click 'Publish to Videography' to go live.");
+          toast.success(
+            "Cinema cover staged & calibrated. Click 'Publish to Videography' to go live."
+          );
         }
       }
     } catch (err) {
@@ -211,7 +324,6 @@ export default function AdminPanel() {
     }
   };
 
-  // Publish staged Photography item
   const handlePublishPhoto = (e: React.FormEvent) => {
     e.preventDefault();
     if (!photoDraft.image.trim()) {
@@ -222,7 +334,8 @@ export default function AdminPanel() {
     const newPhoto: PhotoItem = {
       id: `photo-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       title: photoDraft.title.trim() || "Starline Editorial Commission",
-      subtitle: photoDraft.subtitle.trim() || "Natural light, quiet grace & 35mm analog emulsion",
+      subtitle:
+        photoDraft.subtitle.trim() || "Natural light, quiet grace & 35mm analog emulsion",
       location: photoDraft.location.trim() || "Dallas, Texas",
       category: photoDraft.category,
       medium: photoDraft.medium.trim() || "35mm Portra 400 + Leica Primes",
@@ -247,7 +360,6 @@ export default function AdminPanel() {
     }
   };
 
-  // Publish staged Videography item
   const handlePublishVideo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!videoDraft.coverImage.trim()) {
@@ -289,7 +401,6 @@ export default function AdminPanel() {
     }
   };
 
-  // Replace image on an existing card via drag-and-drop or file picker
   const handleReplaceCardImage = async (cardId: string, file: File) => {
     setIsProcessingImage(true);
     try {
@@ -300,7 +411,9 @@ export default function AdminPanel() {
         setPhotos(updated);
         toast.success("Photograph updated in live gallery.");
       } else {
-        const updated = videos.map((v) => (v.id === cardId ? { ...v, coverImage: optimized } : v));
+        const updated = videos.map((v) =>
+          v.id === cardId ? { ...v, coverImage: optimized } : v
+        );
         saveVideographyItems(updated);
         setVideos(updated);
         toast.success("Videography cover image updated in live gallery.");
@@ -314,7 +427,6 @@ export default function AdminPanel() {
     }
   };
 
-  // Delete item with instant Undo support
   const handleDeletePhoto = (id: string) => {
     const target = photos.find((p) => p.id === id);
     const previous = [...photos];
@@ -349,7 +461,6 @@ export default function AdminPanel() {
     });
   };
 
-  // Move card order up/down
   const handleMovePhoto = (index: number, direction: -1 | 1) => {
     const targetIdx = index + direction;
     if (targetIdx < 0 || targetIdx >= photos.length) return;
@@ -370,7 +481,6 @@ export default function AdminPanel() {
     setVideos(copy);
   };
 
-  // Update inline metadata of existing card
   const handleUpdatePhotoField = (id: string, field: keyof PhotoItem, value: string) => {
     const updated = photos.map((p) => (p.id === id ? { ...p, [field]: value } : p));
     savePhotographyItems(updated);
@@ -398,6 +508,117 @@ export default function AdminPanel() {
   const activeDraftImage =
     activeSection === "photography" ? photoDraft.image : videoDraft.coverImage;
 
+  /* =========================================================================
+     PROTECTED AUTHENTICATION GATE (RENDERED WHEN SESSION IS LOCKED)
+     ========================================================================= */
+  if (!isAuthenticated) {
+    return (
+      <div className="starline-page-shell admin-auth-gate-shell">
+        <Navbar variant="light" />
+
+        <main className="admin-auth-gate-main">
+          <motion.div
+            className="admin-auth-vault-card"
+            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <div className="admin-auth-vault-header">
+              <div className="admin-auth-seal-ring">
+                <Lock size={20} strokeWidth={1.6} />
+              </div>
+              <span className="admin-auth-kicker">
+                STARLINE ATELIER // PROTECTED CURATORIAL GATE
+              </span>
+              <h1 className="admin-auth-title">Director Authentication</h1>
+              <p className="admin-auth-subtitle">
+                Enter the Studio Master Passcode to unlock the Photography &amp; Videography
+                archive curation console.
+              </p>
+            </div>
+
+            <form onSubmit={handleLoginSubmit} className="admin-auth-form">
+              <div className="admin-auth-field">
+                <label htmlFor="atelier-master-passcode" className="admin-label">
+                  ATELIER MASTER PASSCODE
+                </label>
+                <div className="admin-auth-input-wrap">
+                  <input
+                    id="atelier-master-passcode"
+                    type={showPasscode ? "text" : "password"}
+                    value={passcodeInput}
+                    onChange={(e) => setPasscodeInput(e.target.value)}
+                    placeholder="Enter studio passcode..."
+                    className="admin-auth-input"
+                    autoFocus
+                    autoComplete="current-password"
+                    disabled={lockoutState.isLocked || isVerifying}
+                  />
+                  <button
+                    type="button"
+                    className="admin-auth-eye-btn"
+                    onClick={() => setShowPasscode((prev) => !prev)}
+                    aria-label={showPasscode ? "Hide passcode" : "Show passcode"}
+                  >
+                    {showPasscode ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              {authError && (
+                <div className="admin-auth-error-banner" role="alert">
+                  <span>{authError}</span>
+                </div>
+              )}
+
+              {lockoutState.isLocked && !authError && (
+                <div className="admin-auth-error-banner" role="alert">
+                  <span>
+                    Security lockout active. Try again in {lockoutState.remainingSeconds}s.
+                  </span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="admin-auth-submit-btn"
+                disabled={lockoutState.isLocked || isVerifying}
+              >
+                <ShieldCheck size={16} />
+                <span>
+                  {lockoutState.isLocked
+                    ? `LOCKED (${lockoutState.remainingSeconds}S)`
+                    : isVerifying
+                    ? "VERIFYING CREDENTIALS..."
+                    : "UNLOCK CURATORIAL STUDIO"}
+                </span>
+              </button>
+            </form>
+
+            <div className="admin-auth-vault-footer">
+              <div className="admin-auth-security-meta">
+                <span className="admin-cloud-dot is-connected" />
+                <span>
+                  {convexStatus.convexUrl
+                    ? "CONVEX CLOUD ENCRYPTED GATE"
+                    : "SHA-256 PROTECTED SESSION"}
+                </span>
+              </div>
+              <Link href="/" className="admin-auth-back-link">
+                <span>← RETURN TO PUBLIC ATELIER</span>
+              </Link>
+            </div>
+          </motion.div>
+        </main>
+
+        <Footer showClosingCta={false} />
+      </div>
+    );
+  }
+
+  /* =========================================================================
+     AUTHENTICATED CURATORIAL ADMIN CONSOLE
+     ========================================================================= */
   return (
     <div className="starline-page-shell admin-editorial-shell">
       <Navbar variant="light" />
@@ -436,12 +657,29 @@ export default function AdminPanel() {
         <section className="admin-hero-banner">
           <div className="admin-hero-inner">
             <div className="admin-hero-left">
-              <div className="admin-kicker-row">
-                <Sparkles size={13} className="admin-kicker-icon" />
-                <span className="admin-kicker-text">
-                  STARLINE ATELIER // CURATORIAL ARCHIVE CONSOLE
-                </span>
+              <div className="admin-kicker-badges-wrap">
+                <div className="admin-kicker-row">
+                  <Sparkles size={13} className="admin-kicker-icon" />
+                  <span className="admin-kicker-text">
+                    STARLINE ATELIER // CURATORIAL ARCHIVE CONSOLE
+                  </span>
+                </div>
+
+                <div
+                  className="admin-convex-badge"
+                  title={
+                    convexStatus.convexUrl
+                      ? `Connected to Convex Cloud (${convexStatus.convexUrl})`
+                      : "Local Persistence Active"
+                  }
+                >
+                  <Cloud size={12} />
+                  <span>
+                    {convexStatus.convexUrl ? "CONVEX CLOUD ACTIVE" : "LOCAL STORAGE SYNC"}
+                  </span>
+                </div>
               </div>
+
               <h1 className="admin-hero-title">Portfolio Editorial Studio</h1>
               <p className="admin-hero-subtitle">
                 Curate, drag-and-drop, and sequence high-resolution frames across your live
@@ -450,22 +688,43 @@ export default function AdminPanel() {
               </p>
             </div>
 
-            <div className="admin-hero-stats">
-              <div className="admin-stat-box">
-                <span className="admin-stat-label">PHOTOGRAPHY ARCHIVE</span>
-                <span className="admin-stat-num">{photos.length}</span>
-                <Link href="/portfolio/photography" className="admin-stat-link">
-                  <span>VIEW LIVE PAGE</span>
-                  <ArrowUpRight size={12} />
-                </Link>
+            <div className="admin-hero-right-col">
+              <div className="admin-security-bar">
+                <button
+                  type="button"
+                  className="admin-security-btn"
+                  onClick={() => setIsSecurityModalOpen(true)}
+                >
+                  <KeyRound size={13} />
+                  <span>CHANGE PASSCODE</span>
+                </button>
+                <button
+                  type="button"
+                  className="admin-security-btn is-logout"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={13} />
+                  <span>LOCK CONSOLE</span>
+                </button>
               </div>
-              <div className="admin-stat-box">
-                <span className="admin-stat-label">VIDEOGRAPHY FILMS</span>
-                <span className="admin-stat-num">{videos.length}</span>
-                <Link href="/portfolio/videography" className="admin-stat-link">
-                  <span>VIEW LIVE PAGE</span>
-                  <ArrowUpRight size={12} />
-                </Link>
+
+              <div className="admin-hero-stats">
+                <div className="admin-stat-box">
+                  <span className="admin-stat-label">PHOTOGRAPHY ARCHIVE</span>
+                  <span className="admin-stat-num">{photos.length}</span>
+                  <Link href="/portfolio/photography" className="admin-stat-link">
+                    <span>VIEW LIVE PAGE</span>
+                    <ArrowUpRight size={12} />
+                  </Link>
+                </div>
+                <div className="admin-stat-box">
+                  <span className="admin-stat-label">VIDEOGRAPHY FILMS</span>
+                  <span className="admin-stat-num">{videos.length}</span>
+                  <Link href="/portfolio/videography" className="admin-stat-link">
+                    <span>VIEW LIVE PAGE</span>
+                    <ArrowUpRight size={12} />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -481,7 +740,9 @@ export default function AdminPanel() {
                 type="button"
                 role="tab"
                 aria-selected={activeSection === "photography"}
-                className={`admin-section-tab ${activeSection === "photography" ? "is-active" : ""}`}
+                className={`admin-section-tab ${
+                  activeSection === "photography" ? "is-active" : ""
+                }`}
                 onClick={() => {
                   setActiveSection("photography");
                   setEditingId(null);
@@ -496,7 +757,9 @@ export default function AdminPanel() {
                 type="button"
                 role="tab"
                 aria-selected={activeSection === "videography"}
-                className={`admin-section-tab ${activeSection === "videography" ? "is-active" : ""}`}
+                className={`admin-section-tab ${
+                  activeSection === "videography" ? "is-active" : ""
+                }`}
                 onClick={() => {
                   setActiveSection("videography");
                   setEditingId(null);
@@ -559,7 +822,10 @@ export default function AdminPanel() {
                     </h2>
                   </div>
 
-                  <label className="admin-instant-toggle" title="Automatically publish as soon as an image is dropped">
+                  <label
+                    className="admin-instant-toggle"
+                    title="Automatically publish as soon as an image is dropped"
+                  >
                     <input
                       type="checkbox"
                       checked={instantPublishOnDrop}
@@ -1018,7 +1284,6 @@ export default function AdminPanel() {
                           }
                         }}
                       >
-                        {/* Locked 4:5 Editorial Thumbnail */}
                         <div className="admin-card-media is-photo-frame">
                           <img
                             src={photo.image}
@@ -1028,7 +1293,9 @@ export default function AdminPanel() {
                             loading="lazy"
                           />
                           <div className="admin-card-badges">
-                            <span className="admin-index-pill">#{String(idx + 1).padStart(2, "0")}</span>
+                            <span className="admin-index-pill">
+                              #{String(idx + 1).padStart(2, "0")}
+                            </span>
                             <span className="admin-cat-pill">{photo.category}</span>
                           </div>
 
@@ -1038,7 +1305,6 @@ export default function AdminPanel() {
                           </div>
                         </div>
 
-                        {/* Card Controls & Metadata */}
                         <div className="admin-card-body">
                           {isEditing ? (
                             <div className="admin-inline-edit-box">
@@ -1189,7 +1455,6 @@ export default function AdminPanel() {
                           }
                         }}
                       >
-                        {/* Locked 16:9.5 Widescreen Cinema Thumbnail */}
                         <div className="admin-card-media is-video-frame">
                           <img
                             src={film.coverImage}
@@ -1199,8 +1464,12 @@ export default function AdminPanel() {
                             loading="lazy"
                           />
                           <div className="admin-card-badges">
-                            <span className="admin-index-pill">#{String(idx + 1).padStart(2, "0")}</span>
-                            <span className="admin-cat-pill">{film.duration} • {film.category}</span>
+                            <span className="admin-index-pill">
+                              #{String(idx + 1).padStart(2, "0")}
+                            </span>
+                            <span className="admin-cat-pill">
+                              {film.duration} • {film.category}
+                            </span>
                           </div>
 
                           <div className="admin-card-drop-hint">
@@ -1209,7 +1478,6 @@ export default function AdminPanel() {
                           </div>
                         </div>
 
-                        {/* Card Controls & Metadata */}
                         <div className="admin-card-body">
                           {isEditing ? (
                             <div className="admin-inline-edit-box">
@@ -1340,6 +1608,87 @@ export default function AdminPanel() {
           </div>
         </section>
       </main>
+
+      {/* ===================================================================
+          CHANGE MASTER PASSCODE MODAL
+          =================================================================== */}
+      <AnimatePresence>
+        {isSecurityModalOpen && (
+          <motion.div
+            className="starline-lightbox-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSecurityModalOpen(false)}
+          >
+            <motion.div
+              className="admin-security-modal-card"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="admin-security-modal-header">
+                <div>
+                  <span className="admin-section-overline">SECURITY CREDENTIALS</span>
+                  <h3 className="admin-form-title">Update Atelier Passcode</h3>
+                </div>
+                <button
+                  type="button"
+                  className="admin-icon-btn"
+                  onClick={() => setIsSecurityModalOpen(false)}
+                  aria-label="Close modal"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <form onSubmit={handleChangePasscodeSubmit} className="admin-security-modal-form">
+                <div className="admin-field">
+                  <label className="admin-label">CURRENT PASSCODE</label>
+                  <input
+                    type="password"
+                    value={currentPassInput}
+                    onChange={(e) => setCurrentPassInput(e.target.value)}
+                    className="admin-input"
+                    required
+                    autoComplete="current-password"
+                  />
+                </div>
+                <div className="admin-field">
+                  <label className="admin-label">NEW PASSCODE (MIN 8 CHARACTERS)</label>
+                  <input
+                    type="password"
+                    value={newPassInput}
+                    onChange={(e) => setNewPassInput(e.target.value)}
+                    className="admin-input"
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
+                  />
+                </div>
+                <div className="admin-field">
+                  <label className="admin-label">CONFIRM NEW PASSCODE</label>
+                  <input
+                    type="password"
+                    value={confirmPassInput}
+                    onChange={(e) => setConfirmPassInput(e.target.value)}
+                    className="admin-input"
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
+                  />
+                </div>
+                <button type="submit" className="admin-publish-btn">
+                  <ShieldCheck size={15} />
+                  <span>SAVE NEW PASSCODE HASH</span>
+                </button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer showClosingCta={false} />
     </div>

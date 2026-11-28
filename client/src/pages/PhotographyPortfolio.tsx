@@ -1,8 +1,10 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { isAdminAuthenticated, subscribeToAdminAuth } from "@/lib/adminAuth";
 import {
   getPhotographyItems,
   subscribeToPortfolioUpdates,
+  syncPortfoliosFromConvex,
   type PhotoItem
 } from "@/lib/portfolioStore";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
@@ -20,13 +22,22 @@ const categories = [
 
 export default function PhotographyPortfolio() {
   const [photos, setPhotos] = useState<PhotoItem[]>(() => getPhotographyItems());
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => isAdminAuthenticated());
   const [activeCategory, setActiveCategory] = useState<string>("ALL COMMISSIONS");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    return subscribeToPortfolioUpdates(() => {
+    void syncPortfoliosFromConvex();
+    const unsubPortfolio = subscribeToPortfolioUpdates(() => {
       setPhotos(getPhotographyItems());
     });
+    const unsubAuth = subscribeToAdminAuth(() => {
+      setIsAdmin(isAdminAuthenticated());
+    });
+    return () => {
+      unsubPortfolio();
+      unsubAuth();
+    };
   }, []);
 
   const heroRef = useRef<HTMLDivElement>(null);
@@ -105,10 +116,12 @@ export default function PhotographyPortfolio() {
                   {cat}
                 </button>
               ))}
-              <Link href="/admin" className="portfolio-admin-quick-pill" title="Manage Photography Archive">
-                <SlidersHorizontal size={11} />
-                <span>CURATE</span>
-              </Link>
+              {isAdmin && (
+                <Link href="/admin" className="portfolio-admin-quick-pill" title="Manage Photography Archive">
+                  <SlidersHorizontal size={11} />
+                  <span>CURATE</span>
+                </Link>
+              )}
             </div>
           </div>
         </section>

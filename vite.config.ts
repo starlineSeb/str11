@@ -215,6 +215,15 @@ export default defineConfig({
     },
   },
   envDir: path.resolve(import.meta.dirname),
+  envPrefix: ["VITE_", "Convex_", "CONVEX_", "NEXT_PUBLIC_"],
+  define: {
+    "import.meta.env.Convex_URL": JSON.stringify(
+      process.env.Convex_URL || process.env.CONVEX_URL || process.env.VITE_CONVEX_URL || ""
+    ),
+    "import.meta.env.VITE_ADMIN_CUSTOM_KEY": JSON.stringify(
+      process.env.ADMIN_PASSCODE || process.env.VITE_ADMIN_PASSCODE || ""
+    ),
+  },
   root: path.resolve(import.meta.dirname, "client"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),

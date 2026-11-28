@@ -46,8 +46,7 @@ export default function Navbar({ variant = "dark" }: NavbarProps) {
       subItems: [
         { href: "/portfolio/videography", label: "Videography" },
         { href: "/portfolio/photography", label: "Photography" },
-        { href: "/portfolio", label: "Full Archive" },
-        { href: "/admin", label: "Atelier Admin" }
+        { href: "/portfolio", label: "Full Archive" }
       ]
     },
     { href: "/investment", label: "Investment" },

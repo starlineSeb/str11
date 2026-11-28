@@ -1,8 +1,10 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { isAdminAuthenticated, subscribeToAdminAuth } from "@/lib/adminAuth";
 import {
   getVideographyItems,
   subscribeToPortfolioUpdates,
+  syncPortfoliosFromConvex,
   type VideoFilmItem
 } from "@/lib/portfolioStore";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
@@ -20,13 +22,22 @@ const videoCategories = [
 
 export default function VideographyPortfolio() {
   const [films, setFilms] = useState<VideoFilmItem[]>(() => getVideographyItems());
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => isAdminAuthenticated());
   const [activeCategory, setActiveCategory] = useState<string>("ALL FILMS");
   const [activeVideoModal, setActiveVideoModal] = useState<VideoFilmItem | null>(null);
 
   useEffect(() => {
-    return subscribeToPortfolioUpdates(() => {
+    void syncPortfoliosFromConvex();
+    const unsubPortfolio = subscribeToPortfolioUpdates(() => {
       setFilms(getVideographyItems());
     });
+    const unsubAuth = subscribeToAdminAuth(() => {
+      setIsAdmin(isAdminAuthenticated());
+    });
+    return () => {
+      unsubPortfolio();
+      unsubAuth();
+    };
   }, []);
 
   const heroRef = useRef<HTMLDivElement>(null);
@@ -87,10 +98,12 @@ export default function VideographyPortfolio() {
                   {cat}
                 </button>
               ))}
-              <Link href="/admin" className="portfolio-admin-quick-pill" title="Manage Videography Archive">
-                <SlidersHorizontal size={11} />
-                <span>CURATE</span>
-              </Link>
+              {isAdmin && (
+                <Link href="/admin" className="portfolio-admin-quick-pill" title="Manage Videography Archive">
+                  <SlidersHorizontal size={11} />
+                  <span>CURATE</span>
+                </Link>
+              )}
             </div>
           </div>
         </section>
