@@ -215,8 +215,15 @@ export default function Footer({ showClosingCta = false }: FooterProps) {
             </a>
           </div>
 
-          {/* Monogram emblem icon on right */}
-          <div className="exact-footer-monogram">
+          {/* Monogram emblem icon & Admin Studio link on right */}
+          <div className="exact-footer-monogram" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <Link
+              href="/admin"
+              className="exact-seo-item-link"
+              style={{ fontSize: "9px", letterSpacing: "0.22em", opacity: 0.7 }}
+            >
+              ATELIER ADMIN
+            </Link>
             <span className="exact-monogram-circle">✦</span>
           </div>
         </div>

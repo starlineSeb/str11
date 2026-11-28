@@ -1,104 +1,14 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import {
+  getVideographyItems,
+  subscribeToPortfolioUpdates,
+  type VideoFilmItem
+} from "@/lib/portfolioStore";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Film, MapPin, Play, Sparkles, Volume2, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowUpRight, MapPin, Play, SlidersHorizontal, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-
-interface VideoFilmItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  category: "Estates & Coastal" | "California & West" | "Mountain & Desert" | "Intimate & Editorial";
-  location: string;
-  year: string;
-  coverImage: string;
-  videoUrl: string;
-  duration: string;
-  camera: string;
-  details: string;
-}
-
-const videographyFilms: VideoFilmItem[] = [
-  {
-    id: "film-1",
-    title: "Oceanfront Estate // Newport",
-    subtitle: "Gilded Age mansions along the Atlantic Cliff Walk",
-    category: "Estates & Coastal",
-    location: "Newport, Rhode Island",
-    year: "2026",
-    coverImage: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "/vid/new_section_img_optimized.mp4",
-    duration: "4:32",
-    camera: "Arri Alexa Mini LF // 35mm Anamorphic",
-    details: "Shot on Arri Alexa Mini LF & Cooke Anamorphic Primes with live orchestral score"
-  },
-  {
-    id: "film-2",
-    title: "Meadowood Vineyard // Napa Valley",
-    subtitle: "Harvest golden hour & private courtyard candlelit banquet",
-    category: "California & West",
-    location: "Napa Valley, California",
-    year: "2026",
-    coverImage: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "/vid/hero-video.mp4",
-    duration: "5:18",
-    camera: "RED V-Raptor // Leica Summilux",
-    details: "Shot on RED V-Raptor 8K VV & Leica Summilux glass with Super 8mm analog textures"
-  },
-  {
-    id: "film-3",
-    title: "High Sierra Twilight Vows",
-    subtitle: "Glacial granite reflection and quiet mountain stillness",
-    category: "Mountain & Desert",
-    location: "Lake Tahoe, California",
-    year: "2026",
-    coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "/vid/new_section_img_optimized.mp4",
-    duration: "3:45",
-    camera: "35mm Analog Cine Film Hybrid",
-    details: "Natural Twilight & Kodak Vision3 500T 35mm motion picture film stock"
-  },
-  {
-    id: "film-4",
-    title: "Dallas Atelier Bespoke Celebration",
-    subtitle: "Modern Texas architectural romance & black-tie evening",
-    category: "Intimate & Editorial",
-    location: "Dallas, Texas",
-    year: "2026",
-    coverImage: "/wd1.jpg",
-    videoUrl: "/vid/new_section_img_optimized.mp4",
-    duration: "3:20",
-    camera: "Arri 4K Cinema + 35mm Emulsion",
-    details: "Dallas Home Base Signature Commission with custom acoustic arrangement"
-  },
-  {
-    id: "film-5",
-    title: "Sedona Red Rock Canyon Story",
-    subtitle: "Piñon pine breeze and starlit open-air harvest table",
-    category: "Mountain & Desert",
-    location: "Sedona, Arizona",
-    year: "2025",
-    coverImage: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "/vid/hero-video.mp4",
-    duration: "6:10",
-    camera: "4K Master Cinema + Super 8",
-    details: "Documentary Audio Recording & Handcrafted Super 8mm color emulsion"
-  },
-  {
-    id: "film-6",
-    title: "Big Sur Redwood Headlands",
-    subtitle: "Pacific ocean spray and emotional personal vows",
-    category: "California & West",
-    location: "Big Sur, California",
-    year: "2025",
-    coverImage: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "/vid/hero-video.mp4",
-    duration: "4:50",
-    camera: "Arri Alexa Mini LF Cinema",
-    details: "Natural coastal light and multi-track spatial audio master"
-  }
-];
 
 const videoCategories = [
   "ALL FILMS",
@@ -109,8 +19,15 @@ const videoCategories = [
 ] as const;
 
 export default function VideographyPortfolio() {
+  const [films, setFilms] = useState<VideoFilmItem[]>(() => getVideographyItems());
   const [activeCategory, setActiveCategory] = useState<string>("ALL FILMS");
   const [activeVideoModal, setActiveVideoModal] = useState<VideoFilmItem | null>(null);
+
+  useEffect(() => {
+    return subscribeToPortfolioUpdates(() => {
+      setFilms(getVideographyItems());
+    });
+  }, []);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -119,9 +36,10 @@ export default function VideographyPortfolio() {
   });
   const heroParallax = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
 
-  const filteredFilms = activeCategory === "ALL FILMS"
-    ? videographyFilms
-    : videographyFilms.filter((f) => f.category === activeCategory);
+  const filteredFilms =
+    activeCategory === "ALL FILMS"
+      ? films
+      : films.filter((f) => f.category === activeCategory);
 
   return (
     <div className="starline-page-shell">
@@ -147,13 +65,38 @@ export default function VideographyPortfolio() {
             <span className="portfolio-hero-kicker">STARLINE CINEMA // COMMISSIONS</span>
             <h1 className="portfolio-hero-title">Wedding Videography Portfolio</h1>
             <p className="portfolio-hero-subtitle">
-              Crafted with vintage anamorphic glass, 35mm motion picture film, and honest human emotion
+              Crafted with vintage anamorphic glass, 35mm motion picture film, and honest human
+              emotion
             </p>
           </div>
         </section>
 
         {/* ===================================================================
-            2. LUXURY CINEMA SHOWCASE CARDS (2-COLUMN WIDESCREEN)
+            2. STICKY EDITORIAL FILTER BAR + CURATORIAL STUDIO SHORTCUT
+            =================================================================== */}
+        <section className="portfolio-filter-bar-section">
+          <div className="portfolio-filter-container">
+            <div className="portfolio-filter-tabs">
+              {videoCategories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  className={`portfolio-filter-tab ${activeCategory === cat ? "is-active" : ""}`}
+                  onClick={() => setActiveCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+              <Link href="/admin" className="portfolio-admin-quick-pill" title="Manage Videography Archive">
+                <SlidersHorizontal size={11} />
+                <span>CURATE</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ===================================================================
+            3. LUXURY CINEMA SHOWCASE CARDS (2-COLUMN WIDESCREEN)
             =================================================================== */}
         <section className="portfolio-gallery-section">
           <div className="portfolio-gallery-container">
@@ -163,14 +106,13 @@ export default function VideographyPortfolio() {
                   <motion.div
                     key={film.id}
                     layout
-                    initial={{ opacity: 0, y: 50, scale: 0.96 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true, amount: 0.15, margin: "0px 0px -40px 0px" }}
+                    initial={{ opacity: 0, y: 28, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{
-                      duration: 0.8,
+                      duration: 0.45,
                       ease: [0.23, 1, 0.32, 1],
-                      delay: (idx % 2) * 0.15
+                      delay: (idx % 2) * 0.06
                     }}
                     className="portfolio-video-card"
                     onClick={() => setActiveVideoModal(film)}
@@ -180,6 +122,7 @@ export default function VideographyPortfolio() {
                         src={film.coverImage}
                         alt={film.title}
                         className="portfolio-video-thumb-img"
+                        style={{ objectPosition: film.focalPoint || "center center" }}
                         loading="lazy"
                       />
                       <div className="portfolio-video-play-overlay">
@@ -219,7 +162,9 @@ export default function VideographyPortfolio() {
           <div className="portfolio-statement-inner">
             <span className="minimal-overline">THE CINEMATIC MEDIUM</span>
             <blockquote className="portfolio-quote">
-              “Every wedding is captured on industry-standard Arri Alexa cinema sensors paired with authentic 35mm and Super 8mm analog film rolls—resulting in master films of physical permanence and timeless emotional gravity.”
+              “Every wedding is captured on industry-standard Arri Alexa cinema sensors paired with
+              authentic 35mm and Super 8mm analog film rolls—resulting in master films of physical
+              permanence and timeless emotional gravity.”
             </blockquote>
             <p className="portfolio-quote-author">— STARLINE CINEMA ATELIER</p>
           </div>
@@ -233,7 +178,8 @@ export default function VideographyPortfolio() {
             <span className="minimal-overline">BESPOKE COMMISSIONS</span>
             <h2 className="portfolio-closing-title">Reserve Your Wedding Date</h2>
             <p className="portfolio-closing-desc">
-              Operating out of Dallas, Texas with limited commissions available worldwide each season.
+              Operating out of Dallas, Texas with limited commissions available worldwide each
+              season.
             </p>
             <div style={{ marginTop: "28px" }}>
               <Link href="/contact" className="minimal-btn-solid">

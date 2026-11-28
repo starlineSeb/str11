@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import About from "./pages/About";
+import AdminPanel from "./pages/AdminPanel";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Investment from "./pages/Investment";
@@ -22,6 +23,8 @@ function Router() {
       <Route path={"/wedding-photography-portfolio"} component={PhotographyPortfolio} />
       <Route path={"/portfolio/videography"} component={VideographyPortfolio} />
       <Route path={"/wedding-videography-portfolio"} component={VideographyPortfolio} />
+      <Route path={"/admin"} component={AdminPanel} />
+      <Route path={"/admin-panel"} component={AdminPanel} />
       <Route path={"/about"} component={About} />
       <Route path={"/journal"} component={Journal} />
       <Route path={"/contact"} component={Contact} />

@@ -1,112 +1,14 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import {
+  getPhotographyItems,
+  subscribeToPortfolioUpdates,
+  type PhotoItem
+} from "@/lib/portfolioStore";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Camera, ChevronLeft, ChevronRight, Eye, MapPin, Sparkles, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin, SlidersHorizontal, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-
-interface PhotoItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  category: "Estates & Coastal" | "California & West" | "Mountain & Desert" | "Intimate & Editorial";
-  location: string;
-  medium: string;
-  year: string;
-  image: string;
-  aspect?: "portrait" | "landscape" | "tall";
-}
-
-const photographyGallery: PhotoItem[] = [
-  {
-    id: "photo-1",
-    title: "Rosecliff Mansion Oceanfront Vows",
-    subtitle: "Cliff Walk Atlantic breeze & twilight reception",
-    category: "Estates & Coastal",
-    location: "Newport, Rhode Island",
-    medium: "35mm Portra 400 + Leica Primes",
-    year: "2026",
-    image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1200&auto=format&fit=crop",
-    aspect: "tall"
-  },
-  {
-    id: "photo-2",
-    title: "Meadowood Estate Golden Hour",
-    subtitle: "Private harvest courtyard candlelit dinner",
-    category: "California & West",
-    location: "Napa Valley, California",
-    medium: "Medium Format Digital & 35mm Hybrid",
-    year: "2026",
-    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop",
-    aspect: "landscape"
-  },
-  {
-    id: "photo-3",
-    title: "High Sierra Twilight Still",
-    subtitle: "Glacial reflection under alpine blue hour",
-    category: "Mountain & Desert",
-    location: "High Sierra, California",
-    medium: "Kodak Portra 800",
-    year: "2026",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop",
-    aspect: "portrait"
-  },
-  {
-    id: "photo-4",
-    title: "Dallas Atelier Bridal Editorial",
-    subtitle: "Architectural modern romance & black-tie gala",
-    category: "Intimate & Editorial",
-    location: "Dallas, Texas",
-    medium: "Contax 645 Medium Format",
-    year: "2026",
-    image: "/wd1.jpg",
-    aspect: "tall"
-  },
-  {
-    id: "photo-5",
-    title: "Santa Fe Adobe Twilight Banquet",
-    subtitle: "High desert warmth and handcrafted florals",
-    category: "Mountain & Desert",
-    location: "Santa Fe, New Mexico",
-    medium: "Kodak Tri-X 400 Black & White",
-    year: "2025",
-    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop",
-    aspect: "landscape"
-  },
-  {
-    id: "photo-6",
-    title: "Big Sur Coastal Headlands",
-    subtitle: "Pacific ocean spray & unscripted laughter",
-    category: "California & West",
-    location: "Big Sur, California",
-    medium: "35mm Analog Portra 400",
-    year: "2025",
-    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1200&auto=format&fit=crop",
-    aspect: "portrait"
-  },
-  {
-    id: "photo-7",
-    title: "Historic Charleston Live Oak Terrace",
-    subtitle: "Lowcountry evening gathering under Spanish moss",
-    category: "Estates & Coastal",
-    location: "Charleston, South Carolina",
-    medium: "Medium Format Digital",
-    year: "2025",
-    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1200&auto=format&fit=crop",
-    aspect: "landscape"
-  },
-  {
-    id: "photo-8",
-    title: "Sedona Red Rock Vows",
-    subtitle: "Canyon breeze and intimate sunset promise",
-    category: "Mountain & Desert",
-    location: "Sedona, Arizona",
-    medium: "Kodak Portra 400 Film",
-    year: "2025",
-    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop",
-    aspect: "tall"
-  }
-];
 
 const categories = [
   "ALL COMMISSIONS",
@@ -117,8 +19,15 @@ const categories = [
 ] as const;
 
 export default function PhotographyPortfolio() {
+  const [photos, setPhotos] = useState<PhotoItem[]>(() => getPhotographyItems());
   const [activeCategory, setActiveCategory] = useState<string>("ALL COMMISSIONS");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    return subscribeToPortfolioUpdates(() => {
+      setPhotos(getPhotographyItems());
+    });
+  }, []);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -127,22 +36,23 @@ export default function PhotographyPortfolio() {
   });
   const heroParallax = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
 
-  const filteredPhotos = activeCategory === "ALL COMMISSIONS"
-    ? photographyGallery
-    : photographyGallery.filter((p) => p.category === activeCategory);
+  const filteredPhotos =
+    activeCategory === "ALL COMMISSIONS"
+      ? photos
+      : photos.filter((p) => p.category === activeCategory);
 
   const activePhoto = lightboxIndex !== null ? filteredPhotos[lightboxIndex] : null;
 
   const handlePrevPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (lightboxIndex !== null) {
+    if (lightboxIndex !== null && filteredPhotos.length > 0) {
       setLightboxIndex((lightboxIndex - 1 + filteredPhotos.length) % filteredPhotos.length);
     }
   };
 
   const handleNextPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (lightboxIndex !== null) {
+    if (lightboxIndex !== null && filteredPhotos.length > 0) {
       setLightboxIndex((lightboxIndex + 1) % filteredPhotos.length);
     }
   };
@@ -177,7 +87,34 @@ export default function PhotographyPortfolio() {
         </section>
 
         {/* ===================================================================
-            2. CURATED EDITORIAL MASONRY GALLERY
+            2. STICKY EDITORIAL FILTER BAR + CURATORIAL STUDIO SHORTCUT
+            =================================================================== */}
+        <section className="portfolio-filter-bar-section">
+          <div className="portfolio-filter-container">
+            <div className="portfolio-filter-tabs">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  className={`portfolio-filter-tab ${activeCategory === cat ? "is-active" : ""}`}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    setLightboxIndex(null);
+                  }}
+                >
+                  {cat}
+                </button>
+              ))}
+              <Link href="/admin" className="portfolio-admin-quick-pill" title="Manage Photography Archive">
+                <SlidersHorizontal size={11} />
+                <span>CURATE</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ===================================================================
+            3. CURATED EDITORIAL GALLERY (LOCKED 4:5 ALIGNMENT ARCHITECTURE)
             =================================================================== */}
         <section className="portfolio-gallery-section">
           <div className="portfolio-gallery-container">
@@ -187,16 +124,15 @@ export default function PhotographyPortfolio() {
                   <motion.div
                     key={photo.id}
                     layout
-                    initial={{ opacity: 0, y: 45, scale: 0.97 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true, amount: 0.12, margin: "0px 0px -40px 0px" }}
+                    initial={{ opacity: 0, y: 24, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{
-                      duration: 0.75,
+                      duration: 0.45,
                       ease: [0.23, 1, 0.32, 1],
-                      delay: (idx % 3) * 0.1
+                      delay: (idx % 3) * 0.05
                     }}
-                    className={`portfolio-photo-card aspect-${photo.aspect || "portrait"}`}
+                    className="portfolio-photo-card"
                     onClick={() => setLightboxIndex(idx)}
                   >
                     <div className="portfolio-photo-inner">
@@ -204,6 +140,7 @@ export default function PhotographyPortfolio() {
                         src={photo.image}
                         alt={photo.title}
                         className="portfolio-photo-img"
+                        style={{ objectPosition: photo.focalPoint || "center center" }}
                         loading="lazy"
                       />
                       <div className="portfolio-photo-overlay">
@@ -234,7 +171,9 @@ export default function PhotographyPortfolio() {
           <div className="portfolio-statement-inner">
             <span className="minimal-overline">THE PHOTOGRAPHIC APPROACH</span>
             <blockquote className="portfolio-quote">
-              “We look for the quiet moments in between: the deep breath before walking down the aisle, the golden light grazing an evening banquet, and spontaneous laughter shared with those you love most.”
+              “We look for the quiet moments in between: the deep breath before walking down the
+              aisle, the golden light grazing an evening banquet, and spontaneous laughter shared
+              with those you love most.”
             </blockquote>
             <p className="portfolio-quote-author">— SAJAN // PRINCIPAL ARTIST</p>
           </div>
@@ -248,7 +187,8 @@ export default function PhotographyPortfolio() {
             <span className="minimal-overline">BESPOKE COMMISSIONS</span>
             <h2 className="portfolio-closing-title">Document Your Celebration</h2>
             <p className="portfolio-closing-desc">
-              Operating out of Dallas, Texas and accepting 18 bespoke wedding commissions worldwide each year.
+              Operating out of Dallas, Texas and accepting 18 bespoke wedding commissions worldwide
+              each year.
             </p>
             <div style={{ marginTop: "28px" }}>
               <Link href="/contact" className="minimal-btn-solid">
