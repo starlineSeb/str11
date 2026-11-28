@@ -1,16 +1,15 @@
-/**
- * STARLINE ATELIER // CONVEX CLOUD SCHEMA
- * Stores Photography & Videography portfolio collections and Admin security hash.
- */
-export default {
-  portfolio_collections: {
-    section: "string", // "photography" | "videography"
-    itemsJson: "string",
-    updatedAt: "number"
-  },
-  studio_settings: {
-    key: "string", // "admin_passcode_hash"
-    value: "string",
-    updatedAt: "number"
-  }
-};
+import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+
+export default defineSchema({
+  portfolio_collections: defineTable({
+    section: v.string(),
+    itemsJson: v.string(),
+    updatedAt: v.number()
+  }).index("by_section", ["section"]),
+  studio_settings: defineTable({
+    key: v.string(),
+    value: v.string(),
+    updatedAt: v.number()
+  }).index("by_key", ["key"])
+});
